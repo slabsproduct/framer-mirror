@@ -133,15 +133,15 @@
     /* Metric Cards */
     .metrics-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
       margin-bottom: 28px;
     }
     .metric-card {
       background: #fff;
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 22px;
+      border-radius: 8px;
+      padding: 17px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.02);
     }
     .metric-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
@@ -257,13 +257,57 @@
     }
     .modal-box {
       background: #ffffff;
-      border-radius: 26px;
+      border-radius: 8px;
       padding: 34px;
       max-width: 500px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
       box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+    }
+    .modal-box.wide { max-width: 860px; }
+    .invitation-grid, .guest-list-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .invitation-card, .guest-list-card { min-width: 0; padding: 17px; border: 1px solid var(--border); border-radius: 8px; background: #fff; }
+    .invitation-card { display: flex; flex-direction: column; justify-content: space-between; gap: 14px; }
+    .invitation-card-top, .invitation-card-actions { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .invitation-card h3 { margin: 12px 0 4px; color: var(--olive); font: 24px/1.05 'Instrument Serif', serif; }
+    .invitation-card p, .guest-list-card p { margin: 4px 0; color: var(--text-muted); font-size: 12px; line-height: 1.5; }
+    .guest-pills { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+    .guest-pill { max-width: 100%; padding: 5px 7px; border: 1px solid #d5e5d7; border-radius: 4px; background: #f0f7f0; color: #2f6339; font-size: 10px; overflow-wrap: anywhere; }
+    .guest-pill.pending { border-color: #efdfb1; background: #fff8e6; color: #856404; }
+    .guest-pill.declined { border-color: #f1cdd1; background: #faebee; color: #8c2935; }
+    .guest-pill small { color: inherit; opacity: .8; }
+    .advanced-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 13px; border: 1px solid var(--border); border-radius: 8px; background: #fff; margin-bottom: 14px; }
+    .advanced-filters select { max-width: 190px; min-height: 36px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 4px; background: #fff; color: var(--text); font-size: 12px; font-family: inherit; }
+    .advanced-filters .search-input { flex: 1 1 240px; width: auto; }
+    .guest-list-card { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 8px; }
+    .guest-list-card h3 { margin: 0; color: var(--olive); font: 22px/1.1 'Instrument Serif', serif; }
+    .guest-list-card .guest-pill { grid-column: 1 / -1; justify-self: start; }
+    .edit-guest-list { display: grid; gap: 10px; margin: 18px 0; }
+    .edit-guest-card { display: grid; grid-template-columns: 1.2fr 1fr 1.3fr 1fr; gap: 10px; padding: 14px; border: 1px solid var(--border); border-radius: 6px; background: #faf9f5; }
+    .edit-guest-card h4 { grid-column: 1 / -1; margin: 0; color: var(--wine); font: 21px 'Instrument Serif', serif; }
+    .edit-guest-card label { display: block; margin: 0 0 5px; color: var(--olive); font-size: 9px; font-weight: 700; text-transform: uppercase; }
+    .edit-guest-card input, .edit-guest-card select { width: 100%; min-height: 36px; padding: 7px; border: 1px solid var(--border); border-radius: 4px; background: #fff; font-size: 11px; font-family: inherit; }
+    .edit-guest-card .transport-choice { display: flex; align-items: center; gap: 6px; padding-top: 22px; color: var(--olive); font-size: 11px; }
+    .edit-guest-card .transport-choice input { width: auto; min-height: 0; }
+    .guest-detail-row { padding: 12px 0; border-top: 1px solid var(--border); }
+    .guest-detail-row:first-child { border-top: 0; }
+    @media (max-width: 980px) {
+      .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .invitation-grid, .guest-list-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 620px) {
+      header { padding: 14px 18px; }
+      .container { padding: 20px 14px; }
+      .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .metric-card { padding: 13px; }
+      .metric-value { font-size: 36px; }
+      .tabs { gap: 3px; }
+      .tab-btn { padding: 8px 11px; font-size: 12px; }
+      .invitation-grid, .guest-list-grid { grid-template-columns: 1fr; }
+      .search-input { width: 100%; }
+      .modal-box { padding: 22px 16px; }
+      .edit-guest-card { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -311,9 +355,19 @@
       <!-- MÃ©tricas Principales -->
       <div class="metrics-grid">
         <div class="metric-card">
+          <div class="metric-label">Invitaciones</div>
+          <div class="metric-value" id="metric-total-invitations">0</div>
+          <div class="metric-sub">Códigos creados</div>
+        </div>
+        <div class="metric-card">
           <div class="metric-label">Pases Confirmados</div>
           <div class="metric-value" id="metric-confirmed">0</div>
           <div class="metric-sub" id="metric-confirmed-inv">0 invitaciones de <span id="metric-total-inv">0</span></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Pendientes</div>
+          <div class="metric-value" id="metric-pending">0</div>
+          <div class="metric-sub">Invitaciones por responder</div>
         </div>
         <div class="metric-card">
           <div class="metric-label">Asientos de Bus Reservados</div>
@@ -337,6 +391,9 @@
         <button class="tab-btn active" id="btn-tab-invitations" onclick="switchTab('invitations')">
           ðŸ‘¥ CÃ³digos e Invitados
         </button>
+        <button class="tab-btn" id="btn-tab-guests" onclick="switchTab('guests')">
+          Asistentes por pase
+        </button>
         <button class="tab-btn" id="btn-tab-bus" onclick="switchTab('bus')">
           ðŸšŒ GestiÃ³n de Bus & Pasajeros
         </button>
@@ -347,35 +404,52 @@
 
       <!-- PestaÃ±a 1: Invitados y CÃ³digos -->
       <div id="tab-invitations">
-        <div class="controls-bar">
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <input type="text" id="inv-search" class="search-input" placeholder="ðŸ” Buscar por nombre o cÃ³digo..." oninput="filterInvitations()" />
-            <select id="inv-filter-status" onchange="filterInvitations()" style="padding: 9px 12px; border-radius: 999px; border: 1px solid var(--border); font-size: 13px; outline: none;">
-              <option value="all">Todos los estados</option>
-              <option value="confirmed">Confirmados</option>
-              <option value="pending">Pendientes</option>
-              <option value="declined">No asisten</option>
-            </select>
-          </div>
+        <div class="advanced-filters">
+          <input type="text" id="inv-search" class="search-input" placeholder="Buscar por nombre, código o asistente..." oninput="filterInvitations()" />
+          <select id="inv-filter-status" onchange="filterInvitations()">
+            <option value="all">Todos los estados</option>
+            <option value="confirmed">Confirmados</option>
+            <option value="pending">Pendientes</option>
+            <option value="declined">No asisten</option>
+          </select>
+          <select id="inv-filter-transport" onchange="filterInvitations()">
+            <option value="all">Todo traslado</option>
+            <option value="yes">Con traslado</option>
+            <option value="no">Sin traslado</option>
+          </select>
+          <select id="inv-filter-diet" onchange="filterInvitations()">
+            <option value="all">Toda dieta</option>
+            <option value="special">Dieta especial</option>
+            <option value="standard">Menú estándar</option>
+          </select>
+          <select id="inv-filter-passes" onchange="filterInvitations()">
+            <option value="all">Todos los pases</option>
+            <option value="1">1 pase</option>
+            <option value="2">2 pases</option>
+            <option value="3+">3 o más</option>
+          </select>
           <button class="btn btn-olive" onclick="openCreateModal()">+ Crear Nueva InvitaciÃ³n</button>
         </div>
+        <div id="invitations-grid" class="invitation-grid" aria-live="polite"></div>
+      </div>
 
-        <div class="table-card">
-          <table>
-            <thead>
-              <tr>
-                <th>CÃ³digo</th>
-                <th>Invitado / Familia</th>
-                <th>Pases MÃ¡x.</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="invitations-table-body">
-              <tr><td colspan="5" style="text-align: center; padding: 24px;">Cargando lista de invitados...</td></tr>
-            </tbody>
-          </table>
+      <!-- Pestaña 2: Asistentes individuales -->
+      <div id="tab-guests" style="display:none;">
+        <div class="advanced-filters">
+          <input id="guest-search" class="search-input" type="search" placeholder="Buscar asistente, familia o código..." oninput="renderGuestCards()" />
+          <select id="guest-filter-status" onchange="renderGuestCards()">
+            <option value="all">Todos los estados</option>
+            <option value="confirmed">Asisten</option>
+            <option value="pending">Pendientes</option>
+            <option value="declined">No asisten</option>
+          </select>
+          <select id="guest-filter-transport" onchange="renderGuestCards()">
+            <option value="all">Todo traslado</option>
+            <option value="yes">Con traslado</option>
+            <option value="no">Sin traslado</option>
+          </select>
         </div>
+        <div id="guest-cards" class="guest-list-grid" aria-live="polite"></div>
       </div>
 
       <!-- PestaÃ±a 2: GestiÃ³n de Bus & Pasajeros (Avanzada) -->
@@ -385,7 +459,7 @@
           <div class="metric-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <div class="metric-label">Capacidad del Bus (Mendoza â‡„ Potrerillos)</div>
-              <button class="btn btn-outline btn-sm" onclick="editBusCapacity()">âš™ï¸ Configurar</button>
+              <button class="btn btn-outline btn-sm" onclick="editBusCapacity()">âš™ï¸  Configurar</button>
             </div>
             <div style="display: flex; align-items: baseline; gap: 12px; margin: 10px 0;">
               <div class="metric-value" id="bus-occupied-seats">0</div>
@@ -404,9 +478,9 @@
           <div class="metric-card">
             <div class="metric-label">Itinerario y Puntos de Encuentro</div>
             <div style="margin-top: 10px; font-size: 13.5px; line-height: 1.6;">
-              <p>ðŸ“ <strong>Punto de Salida:</strong> Plaza General Espejo, Mendoza Capital</p>
-              <p>â° <strong>Horario de Salida:</strong> 14:00 hs (Puntual)</p>
-              <p>ðŸ <strong>Destino:</strong> La Martineta, Potrerillos</p>
+              <p>ðŸ“  <strong>Punto de Salida:</strong> Plaza General Espejo, Mendoza Capital</p>
+              <p>â ° <strong>Horario de Salida:</strong> 14:00 hs (Puntual)</p>
+              <p>ðŸ   <strong>Destino:</strong> La Martineta, Potrerillos</p>
               <p>ðŸŒ™ <strong>Regreso:</strong> 02:30 hs rumbo a Mendoza Capital</p>
             </div>
           </div>
@@ -506,6 +580,40 @@
     </div>
   </div>
 
+  <!-- Modal de edición por pase -->
+  <div id="edit-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-box wide">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;">
+        <div>
+          <p class="metric-label" style="margin-bottom:3px;">Editar invitación</p>
+          <h3 id="edit-modal-title" style="color:var(--olive);font-family:'Instrument Serif',serif;font-size:28px;">Detalle por pase</h3>
+        </div>
+        <button type="button" onclick="closeEditModal()" aria-label="Cerrar edición" style="background:none;border:0;font-size:22px;cursor:pointer;">×</button>
+      </div>
+      <form id="edit-inv-form">
+        <div class="form-group">
+          <label for="edit-inv-name">Invitado o familia</label>
+          <input id="edit-inv-name" type="text" required />
+        </div>
+        <div class="form-group">
+          <label for="edit-inv-passes">Pases reservados</label>
+          <select id="edit-inv-passes">
+            <option value="1">1 pase</option><option value="2">2 pases</option><option value="3">3 pases</option><option value="4">4 pases</option><option value="5">5 pases</option><option value="6">6 pases</option><option value="7">7 pases</option><option value="8">8 pases</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="edit-inv-notes">Notas internas</label>
+          <input id="edit-inv-notes" type="text" />
+        </div>
+        <div id="edit-guest-list" class="edit-guest-list"></div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;">
+          <button type="button" class="btn btn-outline" onclick="closeEditModal()">Cancelar</button>
+          <button type="submit" class="btn btn-olive">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Modal Ficha de Detalle de Invitado -->
   <div id="detail-modal" class="modal-overlay" style="display:none;">
     <div class="modal-box">
@@ -523,7 +631,33 @@
   <script>
     let allInvitations = [];
     let allRsvps = [];
+    let editingInvitation = null;
     let currentToken = localStorage.getItem('admin_token');
+
+    function escapeHtml(value = '') {
+      return String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
+    }
+
+    function guestsFor(invitation) {
+      const savedRsvp = allRsvps.find(rsvp => rsvp.code === invitation.code);
+      const savedGuests = savedRsvp?.guests?.length ? savedRsvp.guests : (invitation.guests || []);
+      return Array.from({ length: Number(invitation.maxPasses) || 1 }, (_, index) => {
+        const guest = savedGuests[index] || {};
+        return {
+          name: guest.name || '',
+          isAttending: Boolean(guest.isAttending),
+          dietary: guest.dietary || guest.dietaryRestrictions || 'none',
+          notes: guest.notes || '',
+          needsTransport: Boolean(guest.needsTransport),
+          transportLocation: guest.transportLocation || ''
+        };
+      });
+    }
+
+    function guestStatus(invitation, guest) {
+      if (guest.isAttending) return 'confirmed';
+      return invitation.status === 'declined' ? 'declined' : 'pending';
+    }
 
     if (currentToken) {
       showDashboard();
@@ -577,12 +711,14 @@
     function switchTab(tab) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('tab-invitations').style.display = tab === 'invitations' ? 'block' : 'none';
+      document.getElementById('tab-guests').style.display = tab === 'guests' ? 'block' : 'none';
       document.getElementById('tab-bus').style.display = tab === 'bus' ? 'block' : 'none';
       document.getElementById('tab-rsvps').style.display = tab === 'rsvps' ? 'block' : 'none';
 
       document.getElementById(`btn-tab-${tab}`).classList.add('active');
 
       if (tab === 'invitations') loadInvitations();
+      if (tab === 'guests') { loadInvitations(); loadRsvps(); }
       if (tab === 'bus') loadBusManifest();
       if (tab === 'rsvps') loadRsvps();
     }
@@ -592,6 +728,8 @@
       try {
         const res = await fetch('/api/stats');
         const d = await res.json();
+        document.getElementById('metric-total-invitations').innerText = d.totalInvitations || 0;
+        document.getElementById('metric-pending').innerText = d.pendingInvitations || 0;
         document.getElementById('metric-confirmed').innerText = d.totalConfirmedPasses || 0;
         document.getElementById('metric-confirmed-inv').innerText = `${d.confirmedInvitations || 0} invitaciones`;
         document.getElementById('metric-total-inv').innerText = d.totalInvitations || 0;
@@ -599,12 +737,10 @@
         document.getElementById('metric-bus-avail').innerText = `Disponibles: ${d.busAvailable || 0} de ${d.busCapacity || 45}`;
         document.getElementById('metric-declined').innerText = d.declinedCount || 0;
 
-        let dietarySummary = [];
-        if (d.dietary?.celiac) dietarySummary.push(`${d.dietary.celiac} celÃ­acos`);
-        if (d.dietary?.vegetarian) dietarySummary.push(`${d.dietary.vegetarian} vegetarianos`);
-        if (d.dietary?.vegan) dietarySummary.push(`${d.dietary.vegan} veganos`);
-        document.getElementById('metric-dietary-count').innerText = (d.dietary?.celiac || 0) + (d.dietary?.vegetarian || 0) + (d.dietary?.vegan || 0);
-        document.getElementById('metric-dietary-desc').innerText = dietarySummary.join(', ') || 'Sin restricciones especiales';
+        const dietaryLabels = { celiac: 'Sin TACC', vegetarian: 'vegetarianos', vegan: 'veganos', child: 'infantiles', allergy: 'alergias' };
+        const specialDiets = Object.entries(d.dietary || {}).filter(([key, count]) => key !== 'none' && count > 0);
+        document.getElementById('metric-dietary-count').innerText = specialDiets.reduce((total, [, count]) => total + count, 0);
+        document.getElementById('metric-dietary-desc').innerText = specialDiets.map(([key, count]) => `${count} ${dietaryLabels[key] || key}`).join(', ') || 'Sin restricciones especiales';
       } catch (err) {
         console.error('Error stats:', err);
       }
@@ -612,60 +748,206 @@
 
     // Cargar Invitaciones
     async function loadInvitations() {
-      const tbody = document.getElementById('invitations-table-body');
+      const grid = document.getElementById('invitations-grid');
       try {
         const res = await fetch('/api/invitations');
+        if (!res.ok) throw new Error('No se pudieron cargar las invitaciones');
         allInvitations = await res.json();
-        renderInvitations(allInvitations);
+        filterInvitations();
+        renderGuestCards();
       } catch (err) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Error al cargar las invitaciones</td></tr>';
+        grid.innerHTML = '<p style="color:#a00;">Error al cargar las invitaciones.</p>';
       }
     }
 
     function renderInvitations(list) {
-      const tbody = document.getElementById('invitations-table-body');
+      const grid = document.getElementById('invitations-grid');
       if (list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #888; padding: 24px;">No se encontraron invitaciones.</td></tr>';
+        grid.innerHTML = '<div class="metric-card" style="grid-column:1/-1;text-align:center;">No se encontraron invitaciones.</div>';
         return;
       }
 
-      tbody.innerHTML = list.map(inv => `
-        <tr>
-          <td><span class="code-pill">${inv.code}</span></td>
-          <td>
-            <strong>${inv.guestName}</strong>
-            ${inv.notes ? `<div style="font-size:11px; color:#888;">${inv.notes}</div>` : ''}
-          </td>
-          <td>${inv.maxPasses} ${inv.maxPasses === 1 ? 'pase' : 'pases'}</td>
-          <td>
-            <span class="badge badge-${inv.status}">
-              ${inv.status === 'confirmed' ? 'âœ“ Confirmado' : inv.status === 'declined' ? 'âœ— No asiste' : 'â³ Pendiente'}
-            </span>
-          </td>
-          <td style="display: flex; gap: 8px; align-items: center;">
-            <button class="btn btn-outline btn-sm" onclick="openGuestDetail('${inv.code}')">
-              ðŸ‘ï¸ Detalle
-            </button>
-            <button class="btn btn-outline btn-sm" onclick="copyWhatsAppMessage('${inv.guestName}', '${inv.code}', ${inv.maxPasses})">
-              ðŸ“± WhatsApp
-            </button>
-            <button onclick="deleteInvitation('${inv.id}')" style="background:none; border:none; color:#c00; cursor:pointer; font-size:15px; margin-left:6px;" title="Eliminar">ðŸ—‘</button>
-          </td>
-        </tr>
-      `).join('');
+      grid.innerHTML = list.map(inv => {
+        const guests = guestsFor(inv);
+        const status = ['confirmed', 'pending', 'declined'].includes(inv.status) ? inv.status : 'pending';
+        const pills = guests.map(guest => {
+          const guestState = guestStatus(inv, guest);
+          const markers = [guest.dietary !== 'none' ? guest.dietary : '', guest.needsTransport ? 'traslado' : ''].filter(Boolean).join(' · ');
+          return `<span class="guest-pill ${guestState}">${guest.isAttending ? '✓' : guestState === 'declined' ? '×' : '·'} ${escapeHtml(guest.name || 'Pase pendiente')} ${markers ? `<small>· ${escapeHtml(markers)}</small>` : ''}</span>`;
+        }).join('');
+        return `<article class="invitation-card">
+          <div>
+            <div class="invitation-card-top"><span class="code-pill">${escapeHtml(inv.code)}</span><span class="badge badge-${status}">${status === 'confirmed' ? 'Confirmado' : status === 'declined' ? 'No asiste' : 'Pendiente'}</span></div>
+            <h3>${escapeHtml(inv.guestName)}</h3>
+            <p>${inv.maxPasses} ${Number(inv.maxPasses) === 1 ? 'pase reservado' : 'pases reservados'}${inv.notes ? ` · ${escapeHtml(inv.notes)}` : ''}</p>
+            <div class="guest-pills">${pills}</div>
+          </div>
+          <div class="invitation-card-actions">
+            <button class="btn btn-outline btn-sm" data-action="copy" data-code="${escapeHtml(inv.code)}">Copiar WhatsApp</button>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-outline btn-sm" data-action="detail" data-code="${escapeHtml(inv.code)}">Ficha</button>
+              <button class="btn btn-olive btn-sm" data-action="edit" data-code="${escapeHtml(inv.code)}">Editar</button>
+              <button class="btn btn-outline btn-sm" data-action="delete" data-id="${escapeHtml(inv.id)}" title="Eliminar invitación">×</button>
+            </div>
+          </div>
+        </article>`;
+      }).join('');
     }
 
     function filterInvitations() {
       const query = document.getElementById('inv-search').value.toLowerCase().trim();
       const status = document.getElementById('inv-filter-status').value;
+      const transport = document.getElementById('inv-filter-transport').value;
+      const diet = document.getElementById('inv-filter-diet').value;
+      const passes = document.getElementById('inv-filter-passes').value;
 
       const filtered = allInvitations.filter(inv => {
-        const matchesQuery = inv.guestName.toLowerCase().includes(query) || inv.code.toLowerCase().includes(query);
+        const guests = guestsFor(inv);
+        const names = guests.map(guest => guest.name).join(' ').toLowerCase();
+        const matchesQuery = `${inv.guestName} ${inv.code} ${names}`.toLowerCase().includes(query);
         const matchesStatus = status === 'all' || inv.status === status;
-        return matchesQuery && matchesStatus;
+        const matchesTransport = transport === 'all' || guests.some(guest => guest.needsTransport) === (transport === 'yes');
+        const hasSpecialDiet = guests.some(guest => guest.dietary && guest.dietary !== 'none');
+        const matchesDiet = diet === 'all' || hasSpecialDiet === (diet === 'special');
+        const matchesPasses = passes === 'all' || (passes === '3+' ? Number(inv.maxPasses) >= 3 : Number(inv.maxPasses) === Number(passes));
+        return matchesQuery && matchesStatus && matchesTransport && matchesDiet && matchesPasses;
       });
       renderInvitations(filtered);
     }
+
+    function renderGuestCards() {
+      const grid = document.getElementById('guest-cards');
+      if (!grid) return;
+      const query = (document.getElementById('guest-search')?.value || '').trim().toLowerCase();
+      const status = document.getElementById('guest-filter-status')?.value || 'all';
+      const transport = document.getElementById('guest-filter-transport')?.value || 'all';
+      const rows = [];
+      allInvitations.forEach(inv => guestsFor(inv).forEach((guest, index) => {
+        const guestState = guestStatus(inv, guest);
+        if (status !== 'all' && guestState !== status) return;
+        if (transport !== 'all' && guest.needsTransport !== (transport === 'yes')) return;
+        if (!`${guest.name} ${inv.guestName} ${inv.code}`.toLowerCase().includes(query)) return;
+        rows.push({ invitation: inv, guest, index, state: guestState });
+      }));
+      if (!rows.length) {
+        grid.innerHTML = '<div class="metric-card" style="grid-column:1/-1;text-align:center;">No hay pases que coincidan con esos filtros.</div>';
+        return;
+      }
+      grid.innerHTML = rows.map(({ invitation: inv, guest, index, state }) => `<article class="guest-list-card">
+        <div><h3>${escapeHtml(guest.name || `Pase ${index + 1}`)}</h3><p>${escapeHtml(inv.guestName)} · ${escapeHtml(inv.code)}</p></div>
+        <span class="badge badge-${state}">${state === 'confirmed' ? 'Asiste' : state === 'declined' ? 'No asiste' : 'Pendiente'}</span>
+        <span class="guest-pill">${guest.dietary && guest.dietary !== 'none' ? `Dieta: ${escapeHtml(guest.dietary)}` : 'Menú estándar'}</span>
+        ${guest.notes ? `<span class="guest-pill">Nota: ${escapeHtml(guest.notes)}</span>` : ''}
+        ${guest.needsTransport ? `<span class="guest-pill">Traslado · ${escapeHtml(guest.transportLocation || 'Punto pendiente')}</span>` : ''}
+        <button class="btn btn-outline btn-sm" data-action="edit" data-code="${escapeHtml(inv.code)}">Editar invitación</button>
+      </article>`).join('');
+    }
+
+    function readEditGuests() {
+      return Array.from(document.querySelectorAll('#edit-guest-list .edit-guest-card')).map(card => ({
+        name: card.querySelector('[data-edit-field="name"]').value.trim(),
+        isAttending: card.querySelector('[data-edit-field="isAttending"]').checked,
+        dietary: card.querySelector('[data-edit-field="dietary"]').value,
+        dietaryRestrictions: card.querySelector('[data-edit-field="dietary"]').value,
+        notes: card.querySelector('[data-edit-field="notes"]').value.trim(),
+        needsTransport: card.querySelector('[data-edit-field="needsTransport"]').checked,
+        transportLocation: card.querySelector('[data-edit-field="transportLocation"]').value
+      }));
+    }
+
+    function renderEditGuests(savedGuests, count) {
+      const list = document.getElementById('edit-guest-list');
+      const guests = Array.from({ length: count }, (_, index) => savedGuests[index] || {});
+      list.innerHTML = guests.map((guest, index) => `<section class="edit-guest-card">
+        <h4>Pase ${index + 1}</h4>
+        <div><label>Nombre</label><input data-edit-field="name" value="${escapeHtml(guest.name || '')}" /></div>
+        <div><label>Dieta</label><select data-edit-field="dietary">
+          <option value="none" ${!guest.dietary || guest.dietary === 'none' ? 'selected' : ''}>Estándar</option>
+          <option value="celiac" ${guest.dietary === 'celiac' ? 'selected' : ''}>Sin TACC</option>
+          <option value="vegetarian" ${guest.dietary === 'vegetarian' ? 'selected' : ''}>Vegetariano</option>
+          <option value="vegan" ${guest.dietary === 'vegan' ? 'selected' : ''}>Vegano</option>
+          <option value="child" ${guest.dietary === 'child' ? 'selected' : ''}>Infantil</option>
+          <option value="allergy" ${guest.dietary === 'allergy' ? 'selected' : ''}>Alergia / especial</option>
+        </select></div>
+        <div><label>Notas</label><input data-edit-field="notes" value="${escapeHtml(guest.notes || '')}" /></div>
+        <label class="transport-choice"><input data-edit-field="isAttending" type="checkbox" ${guest.isAttending ? 'checked' : ''} /> Asiste</label>
+        <label class="transport-choice"><input data-edit-field="needsTransport" type="checkbox" ${guest.needsTransport ? 'checked' : ''} /> Traslado</label>
+        <div><label>Punto de encuentro</label><select data-edit-field="transportLocation">
+          <option value="">Sin traslado</option>
+          <option value="Mendoza Centro (Plaza Independencia)" ${guest.transportLocation === 'Mendoza Centro (Plaza Independencia)' ? 'selected' : ''}>Mendoza Centro</option>
+          <option value="Chacras de Coria" ${guest.transportLocation === 'Chacras de Coria' ? 'selected' : ''}>Chacras de Coria</option>
+          ${guest.transportLocation && !['Mendoza Centro (Plaza Independencia)', 'Chacras de Coria'].includes(guest.transportLocation) ? `<option selected value="${escapeHtml(guest.transportLocation)}">${escapeHtml(guest.transportLocation)}</option>` : ''}
+        </select></div>
+      </section>`).join('');
+    }
+
+    function openEditInvitation(code) {
+      const invitation = allInvitations.find(item => item.code === code);
+      if (!invitation) return;
+      editingInvitation = invitation;
+      document.getElementById('edit-modal-title').textContent = `${invitation.guestName} · ${invitation.code}`;
+      document.getElementById('edit-inv-name').value = invitation.guestName || '';
+      document.getElementById('edit-inv-passes').value = String(invitation.maxPasses || 1);
+      document.getElementById('edit-inv-notes').value = invitation.notes || '';
+      renderEditGuests(guestsFor(invitation), Number(invitation.maxPasses) || 1);
+      document.getElementById('edit-modal').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-modal').style.display = 'none';
+      editingInvitation = null;
+    }
+
+    document.getElementById('edit-inv-passes').addEventListener('change', event => {
+      const currentGuests = readEditGuests();
+      renderEditGuests(currentGuests, Number(event.target.value) || 1);
+    });
+
+    document.getElementById('edit-inv-form').addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!editingInvitation) return;
+      const response = await fetch(`/api/invitations/${encodeURIComponent(editingInvitation.id)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          guestName: document.getElementById('edit-inv-name').value.trim(),
+          maxPasses: Number(document.getElementById('edit-inv-passes').value),
+          notes: document.getElementById('edit-inv-notes').value.trim(),
+          guests: readEditGuests()
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) return alert(data.error || 'No se pudo guardar la invitación.');
+      closeEditModal();
+      await Promise.all([loadInvitations(), loadRsvps(), loadStats()]);
+    });
+
+    document.getElementById('invitations-grid').addEventListener('click', event => {
+      const button = event.target.closest('[data-action]');
+      if (!button) return;
+      const invitation = allInvitations.find(item => item.code === button.dataset.code);
+      if (button.dataset.action === 'edit') openEditInvitation(button.dataset.code);
+      if (button.dataset.action === 'detail') openGuestDetail(button.dataset.code);
+      if (button.dataset.action === 'copy' && invitation) copyWhatsAppMessage(invitation.guestName, invitation.code, invitation.maxPasses);
+      if (button.dataset.action === 'delete') deleteInvitation(button.dataset.id);
+    });
+
+    document.getElementById('guest-cards').addEventListener('click', event => {
+      const button = event.target.closest('[data-action="edit"]');
+      if (button) openEditInvitation(button.dataset.code);
+    });
+
+    document.getElementById('rsvps-table-body').addEventListener('click', event => {
+      const button = event.target.closest('[data-action="detail"]');
+      if (button) openGuestDetail(button.dataset.code);
+    });
+
+    document.getElementById('detail-modal-content').addEventListener('click', event => {
+      const button = event.target.closest('[data-action="copy"]');
+      if (!button) return;
+      const invitation = allInvitations.find(item => item.code === button.dataset.code);
+      if (invitation) copyWhatsAppMessage(invitation.guestName, invitation.code, invitation.maxPasses);
+    });
 
     // Modal de Detalle Completo del Invitado
     function openGuestDetail(code) {
@@ -673,38 +955,36 @@
       const rsvp = allRsvps.find(r => r.code === code);
       if (!inv && !rsvp) return;
 
-      const name = inv?.guestName || rsvp?.name || 'Invitado';
+      const name = escapeHtml(inv?.guestName || rsvp?.name || 'Invitado');
+      const safeCode = escapeHtml(code);
+      const guests = inv ? guestsFor(inv) : (rsvp?.guests || []);
+      const guestRows = guests.map((guest, index) => `<div class="guest-detail-row">
+        <strong>Pase ${index + 1}: ${escapeHtml(guest.name || 'Sin nombre')}</strong>
+        <p>Asiste: ${guest.isAttending ? 'Sí' : 'No'} · Menú: ${escapeHtml(guest.dietary || guest.dietaryRestrictions || 'none')}</p>
+        ${guest.notes ? `<p>Notas: ${escapeHtml(guest.notes)}</p>` : ''}
+        ${guest.needsTransport ? `<p>Traslado: ${escapeHtml(guest.transportLocation || 'Punto pendiente')}</p>` : ''}
+      </div>`).join('');
       const modal = document.getElementById('detail-modal');
       const content = document.getElementById('detail-modal-content');
 
       content.innerHTML = `
-        <div style="background:#faf8f4; border:1px solid var(--border); border-radius:18px; padding:20px; margin-bottom:16px;">
+        <div style="background:#faf8f4; border:1px solid var(--border); border-radius:8px; padding:20px; margin-bottom:16px;">
           <div style="font-size:11px; text-transform:uppercase; color:#888; font-weight:700;">Invitado / Familia</div>
           <h2 style="font-family:'Instrument Serif',serif; font-size:28px; color:var(--olive); margin:2px 0 10px;">${name}</h2>
-          <p><strong>CÃ³digo:</strong> <span class="code-pill">${code}</span></p>
+          <p><strong>Código:</strong> <span class="code-pill">${safeCode}</span></p>
           <p><strong>Pases asignados:</strong> ${inv?.maxPasses || rsvp?.guestsCount || 1}</p>
-          <p><strong>Estado:</strong> <span class="badge badge-${inv?.status || (rsvp?.attending === 'yes' ? 'confirmed' : 'declined')}">${inv?.status || rsvp?.attending}</span></p>
-          ${inv?.notes ? `<p><strong>Notas internas:</strong> ${inv.notes}</p>` : ''}
+          <p><strong>Estado:</strong> <span class="badge badge-${escapeHtml(inv?.status || (rsvp?.attending === 'yes' ? 'confirmed' : 'declined'))}">${escapeHtml(inv?.status || rsvp?.attending)}</span></p>
+          ${inv?.notes ? `<p><strong>Notas internas:</strong> ${escapeHtml(inv.notes)}</p>` : ''}
         </div>
 
-        ${rsvp ? `
-          <div style="background:#fff; border:1px solid var(--border); border-radius:18px; padding:20px; margin-bottom:16px;">
-            <h4 style="font-size:14px; color:var(--olive); text-transform:uppercase; margin-bottom:8px;">Datos de ConfirmaciÃ³n RSVP</h4>
-            <p><strong>Â¿Asiste?:</strong> ${rsvp.attending === 'yes' ? 'ðŸŽ‰ SÃ­, asistirÃ¡' : 'No asistirÃ¡'}</p>
-            <p><strong>Pases confirmados:</strong> ${rsvp.guestsCount}</p>
-            <p><strong>MenÃº:</strong> ${rsvp.dietary}</p>
-            <p><strong>Bus Mendoza-Potrerillos:</strong> ${rsvp.needBus === 'yes' ? `ðŸšŒ SÃ­ (${rsvp.busSeats || rsvp.guestsCount} asientos)` : 'No'}</p>
-            ${rsvp.message ? `<p><strong>Dedicatoria:</strong> <em>"${rsvp.message}"</em></p>` : ''}
-            <p style="font-size:11px; color:#888; margin-top:8px;">Confirmado el: ${new Date(rsvp.createdAt).toLocaleString()}</p>
-          </div>
-        ` : `
-          <div style="padding:12px; background:#fff8e6; border-radius:12px; font-size:13px; color:#856404; margin-bottom:16px;">
-            â³ AÃºn no ha enviado su confirmaciÃ³n a travÃ©s de la web.
-          </div>
-        `}
+        <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;">
+          <h4 style="font-size:13px;color:var(--olive);text-transform:uppercase;margin-bottom:8px;">Detalle de asistentes</h4>
+          ${guestRows || '<p>Aún no hay datos individuales de los pases.</p>'}
+          ${rsvp?.createdAt ? `<p style="font-size:11px;color:#888;margin-top:8px;">Respuesta: ${new Date(rsvp.createdAt).toLocaleString()}</p>` : ''}
+        </div>
 
         <div style="display:flex; gap:10px; justify-content:flex-end;">
-          <button class="btn btn-outline" onclick="copyWhatsAppMessage('${name}', '${code}', ${inv?.maxPasses || 2})">ðŸ“± Copiar WhatsApp</button>
+          <button class="btn btn-outline" data-action="copy" data-code="${safeCode}">Copiar WhatsApp</button>
           <button class="btn btn-olive" onclick="closeDetailModal()">Cerrar</button>
         </div>
       `;
@@ -746,7 +1026,7 @@
               <td>14:00 hs</td>
               <td>
                 <button class="btn ${p.boardedBus ? 'btn-olive' : 'btn-outline'} btn-sm" onclick="toggleBoarded('${p.id}', ${!p.boardedBus})">
-                  ${p.boardedBus ? 'âœ“ Abordado' : 'â³ Marcar Abordo'}
+                  ${p.boardedBus ? 'âœ“ Abordado' : 'â ³ Marcar Abordo'}
                 </button>
               </td>
             </tr>
@@ -782,9 +1062,10 @@
 
     // Copiar mensaje para WhatsApp
     function copyWhatsAppMessage(name, code, passes) {
-      const text = `Â¡Hola ${name}! ðŸ’›\nQueremos que seas parte de nuestra boda este 03 de Abril de 2027 en Potrerillos, Mendoza.\n\nPreparamos nuestra web para que puedas ver todos los detalles y confirmar tus ${passes} pases:\nðŸ‘‰ https://bodamariysimon.online/?code=${code}\n\nTu cÃ³digo exclusivo de confirmaciÃ³n es: *${code}*\n\nÂ¡Esperamos celebrar juntos! Mari & SimÃ³n`;
+      const link = `${window.location.origin}/rsvp.html?code=${encodeURIComponent(code)}`;
+      const text = `¡Hola ${name}!\nQueremos que seas parte de nuestra boda este 03 de Abril de 2027 en Potrerillos, Mendoza.\n\nPreparamos nuestra web para que puedas ver todos los detalles y confirmar tus ${passes} pases:\n${link}\n\nTu código exclusivo de confirmación es: *${code}*\n\n¡Esperamos celebrar juntos! Mari & Simón`;
       navigator.clipboard.writeText(text);
-      alert(`Â¡Mensaje para ${name} copiado al portapapeles!\n\nEnlace con cÃ³digo: ?code=${code}\nListo para pegar en WhatsApp.`);
+      alert(`¡Mensaje para ${name} copiado al portapapeles!\n\nEnlace: ${link}\nListo para pegar en WhatsApp.`);
     }
 
     // Modal Crear InvitaciÃ³n
@@ -831,31 +1112,31 @@
         const res = await fetch('/api/rsvps');
         const data = await res.json();
         allRsvps = data.rsvps || [];
+        filterInvitations();
+        renderGuestCards();
 
         if (allRsvps.length === 0) {
           tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #888; padding: 24px;">No hay confirmaciones registradas aÃºn.</td></tr>';
           return;
         }
 
-        tbody.innerHTML = allRsvps.map(r => `
-          <tr>
-            <td><strong>${r.name}</strong></td>
-            <td><span class="code-pill">${r.code || '-'}</span></td>
-            <td>
-              <span class="badge ${r.attending === 'yes' ? 'badge-confirmed' : 'badge-declined'}">
-                ${r.attending === 'yes' ? 'Asiste' : 'No Asiste'}
-              </span>
-            </td>
-            <td>${r.guestsCount || 1}</td>
-            <td>${r.dietary === 'celiac' ? 'ðŸž CelÃ­aco' : r.dietary === 'vegetarian' ? 'ðŸ¥— Vegetariano' : r.dietary === 'vegan' ? 'ðŸŒ± Vegano' : 'EstÃ¡ndar'}</td>
-            <td>${r.needBus === 'yes' ? `ðŸšŒ SÃ­ (${r.busSeats || r.guestsCount})` : 'No'}</td>
-            <td><em>${r.message || '-'}</em></td>
-            <td style="color: var(--text-muted); font-size: 11px;">${new Date(r.createdAt).toLocaleDateString()}</td>
-            <td>
-              <button class="btn btn-outline btn-sm" onclick="openGuestDetail('${r.code}')">ðŸ‘ï¸ Ficha</button>
-            </td>
-          </tr>
-        `).join('');
+        tbody.innerHTML = allRsvps.map(r => {
+          const attendingGuests = Array.isArray(r.guests) ? r.guests.filter(guest => guest.isAttending) : [];
+          const names = attendingGuests.map(guest => guest.name).filter(Boolean).join(', ') || r.name;
+          const menus = [...new Set(attendingGuests.map(guest => guest.dietary || guest.dietaryRestrictions || 'none').filter(value => value !== 'none'))];
+          const transportCount = attendingGuests.filter(guest => guest.needsTransport).length;
+          return `<tr>
+            <td><strong>${escapeHtml(names)}</strong></td>
+            <td><span class="code-pill">${escapeHtml(r.code || '-')}</span></td>
+            <td><span class="badge ${r.attending === 'yes' ? 'badge-confirmed' : 'badge-declined'}">${r.attending === 'yes' ? 'Asiste' : 'No asiste'}</span></td>
+            <td>${attendingGuests.length || r.guestsCount || 1}</td>
+            <td>${menus.length ? escapeHtml(menus.join(', ')) : 'Estándar'}</td>
+            <td>${transportCount ? `${transportCount} ${transportCount === 1 ? 'persona' : 'personas'}` : (r.needBus === 'yes' ? `Sí (${r.busSeats || r.guestsCount})` : 'No')}</td>
+            <td><em>${escapeHtml(r.message || attendingGuests.map(guest => guest.notes).filter(Boolean).join(' · ') || '-')}</em></td>
+            <td style="color: var(--text-muted); font-size: 11px;">${r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '-'}</td>
+            <td><button class="btn btn-outline btn-sm" data-action="detail" data-code="${escapeHtml(r.code || '')}">Ficha</button></td>
+          </tr>`;
+        }).join('');
       } catch (err) {
         tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: red;">Error al cargar respuestas</td></tr>';
       }

@@ -38,6 +38,22 @@ function writeJson(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf-8');
 }
 
+function makeGuestSlots(maxPasses, guests = []) {
+  const count = Math.max(1, Number(maxPasses) || 1);
+  return Array.from({ length: count }, (_, index) => {
+    const guest = guests[index] || {};
+    return {
+      name: guest.name || '',
+      isAttending: Boolean(guest.isAttending),
+      dietary: guest.dietary || guest.dietaryRestrictions || 'none',
+      dietaryRestrictions: guest.dietaryRestrictions || guest.dietary || 'none',
+      notes: guest.notes || '',
+      needsTransport: Boolean(guest.needsTransport),
+      transportLocation: guest.transportLocation || ''
+    };
+  });
+}
+
 // Configuración inicial del bus
 function getBusConfig() {
   return readJson(BUS_CONFIG_FILE, {
@@ -83,7 +99,10 @@ app.post('/api/admin/login', (req, res) => {
 // ----------------- GESTIÓN DE CÓDIGOS DE INVITACIÓN -----------------
 app.get('/api/invitations', (req, res) => {
   const invitations = readJson(INVITATIONS_FILE, []);
-  return res.json(invitations);
+  return res.json(invitations.map(invitation => ({
+    ...invitation,
+    guests: makeGuestSlots(invitation.maxPasses, invitation.guests)
+  })));
 });
 
 app.post('/api/invitations', (req, res) => {
@@ -104,6 +123,7 @@ app.post('/api/invitations', (req, res) => {
     code: cleanCode,
     guestName: guestName.trim(),
     maxPasses: Number(maxPasses) || 1,
+    guests: makeGuestSlots(Number(maxPasses) || 1),
     notes: notes || '',
     status: 'pending',
     createdAt: new Date().toISOString()
@@ -126,9 +146,13 @@ app.put('/api/invitations/:id', (req, res) => {
   }
 
   if (guestName) invitations[idx].guestName = guestName.trim();
-  if (maxPasses) invitations[idx].maxPasses = Number(maxPasses);
+  if (maxPasses) invitations[idx].maxPasses = Math.max(1, Number(maxPasses));
   if (notes !== undefined) invitations[idx].notes = notes;
   if (status) invitations[idx].status = status;
+  invitations[idx].guests = makeGuestSlots(
+    invitations[idx].maxPasses,
+    Array.isArray(req.body.guests) ? req.body.guests : invitations[idx].guests
+  );
 
   writeJson(INVITATIONS_FILE, invitations);
   return res.json(invitations[idx]);
@@ -153,7 +177,8 @@ app.get('/api/invitations/verify/:code', (req, res) => {
       valid: true,
       guestName: found.guestName,
       maxPasses: found.maxPasses,
-      status: found.status
+      status: found.status,
+      guests: makeGuestSlots(found.maxPasses, found.guests)
     });
   }
 
@@ -162,42 +187,62 @@ app.get('/api/invitations/verify/:code', (req, res) => {
 
 // ----------------- GESTIÓN DE RESPUESTAS (RSVP) -----------------
 app.post('/api/rsvp', (req, res) => {
-  const { name, code, attending, guestsCount, dietary, needBus, message } = req.body;
+  const { code, guests, attending, guestsCount, dietary, needBus, message } = req.body;
+  const cleanCode = (code || '').trim().toUpperCase();
+  const invitations = readJson(INVITATIONS_FILE, []);
+  const invitation = invitations.find(item => item.code === cleanCode);
 
-  if (!name) {
-    return res.status(400).json({ error: 'El nombre es obligatorio' });
+  if (!invitation) {
+    return res.status(404).json({ success: false, error: 'Código de invitación no válido.' });
   }
 
+  let guestPasses;
+  if (Array.isArray(guests)) {
+    if (guests.length > invitation.maxPasses) {
+      return res.status(400).json({ success: false, error: 'La respuesta supera los pases reservados.' });
+    }
+    guestPasses = makeGuestSlots(invitation.maxPasses, guests);
+  } else {
+    const attendingCount = attending === 'no' ? 0 : Math.min(invitation.maxPasses, Number(guestsCount) || 1);
+    guestPasses = makeGuestSlots(invitation.maxPasses).map((guest, index) => ({
+      ...guest,
+      name: index === 0 ? (req.body.name || '') : '',
+      isAttending: index < attendingCount,
+      dietary: index === 0 ? (dietary || 'none') : 'none',
+      dietaryRestrictions: index === 0 ? (dietary || 'none') : 'none',
+      needsTransport: needBus === 'yes' && index < attendingCount,
+      transportLocation: needBus === 'yes' ? (req.body.transportLocation || 'Plaza General Espejo, Mendoza Capital') : '',
+      notes: index === 0 ? (message || '') : ''
+    }));
+  }
+
+  const attendingGuests = guestPasses.filter(guest => guest.isAttending);
+  const transportGuests = attendingGuests.filter(guest => guest.needsTransport);
+  const attendingStatus = attendingGuests.length > 0 ? 'yes' : 'no';
   const rsvps = readJson(RSVPS_FILE, []);
+  const previous = rsvps.find(item => item.code === cleanCode);
   const newRsvp = {
-    id: Date.now().toString(),
-    name,
-    code: (code || '').trim().toUpperCase(),
-    attending: attending || 'yes',
-    guestsCount: Number(guestsCount) || (attending === 'yes' ? 1 : 0),
-    dietary: dietary || 'none',
-    needBus: needBus || 'no',
-    busSeats: needBus === 'yes' ? Number(guestsCount) || 1 : 0,
+    id: previous?.id || Date.now().toString(),
+    name: invitation.guestName,
+    code: cleanCode,
+    attending: attendingStatus,
+    guestsCount: attendingGuests.length,
+    dietary: attendingGuests.find(guest => guest.dietary !== 'none')?.dietary || 'none',
+    needBus: transportGuests.length > 0 ? 'yes' : 'no',
+    busSeats: transportGuests.length,
+    guests: guestPasses,
     message: message || '',
-    boardedBus: false, // Check-in para el chofer
+    boardedBus: previous?.boardedBus || false,
     createdAt: new Date().toISOString()
   };
 
-  rsvps.unshift(newRsvp);
-  writeJson(RSVPS_FILE, rsvps);
+  writeJson(RSVPS_FILE, [newRsvp, ...rsvps.filter(item => item.code !== cleanCode)]);
+  invitation.guests = guestPasses;
+  invitation.status = attendingStatus === 'yes' ? 'confirmed' : 'declined';
+  invitation.confirmedAt = newRsvp.createdAt;
+  writeJson(INVITATIONS_FILE, invitations);
 
-  // Actualizar estado de la invitación asociada
-  if (code) {
-    const invitations = readJson(INVITATIONS_FILE, []);
-    const inv = invitations.find(i => i.code === code.trim().toUpperCase());
-    if (inv) {
-      inv.status = attending === 'yes' ? 'confirmed' : 'declined';
-      inv.confirmedAt = new Date().toISOString();
-      writeJson(INVITATIONS_FILE, invitations);
-    }
-  }
-
-  console.log(`[RSVP] ${name} (${newRsvp.code}) - Asiste: ${attending} | Bus: ${newRsvp.busSeats}`);
+  console.log(`[RSVP] ${invitation.guestName} (${cleanCode}) - Asisten: ${attendingGuests.length} | Traslado: ${transportGuests.length}`);
   return res.status(201).json({ success: true, data: newRsvp });
 });
 
@@ -278,11 +323,21 @@ app.get('/api/stats', (req, res) => {
   const busConfig = getBusConfig();
 
   const attendingList = rsvps.filter(r => r.attending === 'yes');
-  const totalConfirmedPasses = attendingList.reduce((acc, curr) => acc + (curr.guestsCount || 1), 0);
-  const busSeatsTotal = attendingList.reduce((acc, curr) => acc + (curr.needBus === 'yes' ? (curr.busSeats || curr.guestsCount || 1) : 0), 0);
+  const totalConfirmedPasses = attendingList.reduce((acc, curr) => acc + (
+    Array.isArray(curr.guests) ? curr.guests.filter(guest => guest.isAttending).length : (curr.guestsCount || 1)
+  ), 0);
+  const busSeatsTotal = attendingList.reduce((acc, curr) => acc + (
+    Array.isArray(curr.guests) ? curr.guests.filter(guest => guest.isAttending && guest.needsTransport).length : (curr.needBus === 'yes' ? (curr.busSeats || curr.guestsCount || 1) : 0)
+  ), 0);
 
   const dietary = attendingList.reduce((acc, curr) => {
-    acc[curr.dietary] = (acc[curr.dietary] || 0) + (curr.guestsCount || 1);
+    if (Array.isArray(curr.guests)) {
+      curr.guests.filter(guest => guest.isAttending && guest.dietary && guest.dietary !== 'none').forEach(guest => {
+        acc[guest.dietary] = (acc[guest.dietary] || 0) + 1;
+      });
+    } else if (curr.dietary && curr.dietary !== 'none') {
+      acc[curr.dietary] = (acc[curr.dietary] || 0) + (curr.guestsCount || 1);
+    }
     return acc;
   }, {});
 
@@ -302,22 +357,38 @@ app.get('/api/stats', (req, res) => {
 // Exportar CSV completo de invitados
 app.get('/api/export/csv', (req, res) => {
   const rsvps = readJson(RSVPS_FILE, []);
-  let csv = 'Nombre,Codigo,Asiste,Pases,Menu,Bus,Asientos Bus,Mensaje,Fecha\n';
+  const csvCell = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
+  const rows = [['Titular', 'Codigo', 'Asistente', 'Asiste', 'Menu', 'Traslado', 'Punto de encuentro', 'Notas', 'Fecha']];
 
-  rsvps.forEach(r => {
-    const line = [
-      `"${r.name}"`,
-      `"${r.code || ''}"`,
-      r.attending === 'yes' ? 'SI' : 'NO',
-      r.guestsCount || 1,
-      `"${r.dietary}"`,
-      r.needBus === 'yes' ? 'SI' : 'NO',
-      r.busSeats || 0,
-      `"${(r.message || '').replace(/"/g, '""')}"`,
-      `"${r.createdAt}"`
-    ].join(',');
-    csv += line + '\n';
+  rsvps.forEach(rsvp => {
+    if (Array.isArray(rsvp.guests) && rsvp.guests.length) {
+      rsvp.guests.forEach((guest, index) => rows.push([
+        rsvp.name,
+        rsvp.code || '',
+        guest.name || `Pase ${index + 1}`,
+        guest.isAttending ? 'SI' : 'NO',
+        guest.dietary || guest.dietaryRestrictions || 'none',
+        guest.needsTransport ? 'SI' : 'NO',
+        guest.transportLocation || '',
+        guest.notes || '',
+        rsvp.createdAt || ''
+      ]));
+      return;
+    }
+    rows.push([
+      rsvp.name,
+      rsvp.code || '',
+      rsvp.name,
+      rsvp.attending === 'yes' ? 'SI' : 'NO',
+      rsvp.dietary || 'none',
+      rsvp.needBus === 'yes' ? 'SI' : 'NO',
+      rsvp.transportLocation || '',
+      rsvp.message || '',
+      rsvp.createdAt || ''
+    ]);
   });
+
+  const csv = rows.map(row => row.map(csvCell).join(',')).join('\n') + '\n';
 
   res.header('Content-Type', 'text/csv; charset=utf-8');
   res.attachment('invitados_boda_mari_y_simon.csv');

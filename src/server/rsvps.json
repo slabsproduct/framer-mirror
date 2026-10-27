@@ -1,1 +1,35 @@
-[]
+[
+  {
+    "id": "1793071807181",
+    "name": "Mari & Simón (Novios)",
+    "code": "MARISIMON",
+    "attending": "yes",
+    "guestsCount": 2,
+    "dietary": "celiac",
+    "needBus": "yes",
+    "busSeats": 2,
+    "guests": [
+      {
+        "name": "mari",
+        "isAttending": true,
+        "dietary": "celiac",
+        "dietaryRestrictions": "celiac",
+        "notes": "",
+        "needsTransport": true,
+        "transportLocation": "Chacras de Coria"
+      },
+      {
+        "name": "Simon Arraiz",
+        "isAttending": true,
+        "dietary": "celiac",
+        "dietaryRestrictions": "celiac",
+        "notes": "",
+        "needsTransport": true,
+        "transportLocation": "Chacras de Coria"
+      }
+    ],
+    "message": "",
+    "boardedBus": false,
+    "createdAt": "2026-10-27T03:30:07.181Z"
+  }
+]

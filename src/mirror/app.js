@@ -305,13 +305,9 @@ function injectRsvpModal() {
   // Comprobar si hay un código en los parámetros de la URL (?code=XYZ)
   const urlParams = new URLSearchParams(window.location.search);
   const codeFromUrl = urlParams.get('code');
-  if (codeFromUrl) {
-    gateCodeInput.value = codeFromUrl.toUpperCase();
-    validateCode(codeFromUrl).then(valid => {
-      if (valid) {
-        setTimeout(openModal, 600);
-      }
-    });
+  if (codeFromUrl && window.location.pathname === '/') {
+    window.location.replace(`/rsvp.html?code=${encodeURIComponent(codeFromUrl)}`);
+    return;
   }
 
   // Intercepción global por delegación de eventos con captura
@@ -334,7 +330,7 @@ function injectRsvpModal() {
     ) {
       e.preventDefault();
       e.stopPropagation();
-      openModal();
+      window.location.href = '/rsvp.html';
     }
   }, true);
 }

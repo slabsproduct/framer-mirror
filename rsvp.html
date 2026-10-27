@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#363b1f" />
+    <title>Confirmar asistencia | Mari & Simón</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/mirror/rsvp-page.css" />
+  </head>
+  <body class="rsvp-page">
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="Mari y Simón, inicio">
+        <span>Mari</span><span class="wordmark-flower" aria-hidden="true">&#10047;</span><span>Simón</span>
+      </a>
+      <a class="back-link" href="/">Volver al sitio <span aria-hidden="true">&#8599;</span></a>
+    </header>
+
+    <main class="rsvp-layout">
+      <aside class="welcome-panel">
+        <div class="welcome-copy">
+          <p class="eyebrow">03 de abril de 2027 · Mendoza</p>
+          <h1>Un día para<br /><em>celebrar juntos.</em></h1>
+          <p>Nos hace mucha ilusión compartir este día con vos. Confirmá tu invitación y contanos los detalles de cada pase.</p>
+          <div class="welcome-rule"><span></span><span></span><span></span></div>
+          <p class="welcome-place">La Martineta<br />Potrerillos, Mendoza</p>
+        </div>
+      </aside>
+
+      <section class="form-panel" aria-live="polite">
+        <div id="step-code" class="form-step">
+          <p class="eyebrow">Mari & Simón</p>
+          <h2>Confirmar asistencia</h2>
+          <p class="step-intro">Ingresá el código exclusivo que recibiste para consultar tus pases reservados.</p>
+
+          <form id="code-form" novalidate>
+            <label for="invitation-code">Código de invitación</label>
+            <div class="code-entry">
+              <input id="invitation-code" name="code" type="text" placeholder="Ej. MARISIMON" autocomplete="off" required />
+              <button class="primary-button" type="submit">Continuar <span aria-hidden="true">&#8594;</span></button>
+            </div>
+            <p id="code-error" class="error-message" role="alert" hidden></p>
+          </form>
+
+          <div class="demo-block">
+            <p>Probar con una invitación de demostración</p>
+            <div class="demo-codes">
+              <button type="button" data-demo-code="MARISIMON">MARISIMON</button>
+              <button type="button" data-demo-code="FAMILIAPEREZ">FAMILIAPEREZ</button>
+              <button type="button" data-demo-code="INVITADO1">INVITADO1</button>
+            </div>
+          </div>
+
+          <a class="whatsapp-link" href="https://wa.me/?text=%C2%A1Hola%20Mari%20y%20Sim%C3%B3n!%20No%20recuerdo%20mi%20c%C3%B3digo%20de%20invitaci%C3%B3n%20para%20la%20boda%2C%20%C2%BFme%20lo%20podr%C3%ADan%20recordar%3F" target="_blank" rel="noopener noreferrer">
+            <span class="whatsapp-mark" aria-hidden="true">W</span>
+            ¿No encontrás tu código? Escribinos por WhatsApp
+          </a>
+        </div>
+
+        <div id="step-guests" class="form-step" hidden>
+          <button id="change-code" class="text-button" type="button">&#8592; Cambiar código</button>
+          <p class="eyebrow">Invitación <span id="invitation-code-label"></span></p>
+          <h2 id="invitation-heading">¡Hola!</h2>
+          <p id="invitation-summary" class="step-intro"></p>
+
+          <form id="guest-form">
+            <div class="attendance-heading">
+              <div>
+                <h3>Tu respuesta</h3>
+                <p>Podés confirmar a cada persona por separado.</p>
+              </div>
+              <span id="attendance-count" class="count-pill"></span>
+            </div>
+            <div id="guest-list" class="guest-list"></div>
+            <p id="guest-error" class="error-message" role="alert" hidden></p>
+            <div class="form-actions">
+              <button class="text-button" id="cancel-rsvp" type="button">Cancelar</button>
+              <button id="submit-rsvp" class="primary-button" type="submit">Enviar confirmación <span aria-hidden="true">&#8594;</span></button>
+            </div>
+          </form>
+        </div>
+
+        <div id="step-success" class="form-step success-step" hidden>
+          <div class="success-mark" aria-hidden="true">&#10003;</div>
+          <p class="eyebrow">Respuesta registrada</p>
+          <h2 id="success-heading">¡Gracias!</h2>
+          <p id="success-copy" class="step-intro"></p>
+          <div id="success-summary" class="success-summary"></div>
+          <button id="edit-response" class="secondary-button" type="button">Modificar respuesta</button>
+          <a class="text-button home-link" href="/">Volver al sitio</a>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="/src/mirror/rsvp-page.js"></script>
+  </body>
+</html>
