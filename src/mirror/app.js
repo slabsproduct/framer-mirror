@@ -315,6 +315,10 @@ function injectRsvpModal() {
   }
 
   // Intercepción global por delegación de eventos con captura
+  // La página standalone del nuevo RSVP (app React montada — Opción B).
+  // Configurable con VITE_RSVP_URL al buildear el home; por defecto localhost:3005.
+  const RSVP_STANDALONE_BASE = (import.meta.env && import.meta.env.VITE_RSVP_URL) || 'http://localhost:3005/';
+
   document.addEventListener('click', (e) => {
     const trigger = e.target.closest('a, button, [role="button"]');
     if (!trigger) return;
@@ -334,7 +338,12 @@ function injectRsvpModal() {
     ) {
       e.preventDefault();
       e.stopPropagation();
-      openModal();
+      // Redirigir al RSVP standalone conservando el ?code=XXX si existiera
+      const incomingCode = new URLSearchParams(window.location.search).get('code');
+      const target = new URL(RSVP_STANDALONE_BASE, window.location.href);
+      target.searchParams.set('view', 'rsvp');
+      if (incomingCode) target.searchParams.set('code', incomingCode);
+      window.location.href = target.toString();
     }
   }, true);
 }
