@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Back Office — Boda Mari & Simón</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Instrument+Serif:ital@0;1&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --olive: #363b1f;
+      --olive-dark: #252a14;
+      --olive-light: #f4f6ee;
+      --burgundy: #6e0d23;
+      --burgundy-light: #faebee;
+      --cream: #faf6f2;
+      --card-bg: #ffffff;
+      --border: #e7e3d8;
+      --text: #222222;
+      --text-muted: #666666;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .logo {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 28px;
+      color: var(--olive);
+      text-decoration: none;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+      display: inline-block;
+    }
+    .badge-pending { background: #fff3cd; color: #856404; }
+    .badge-confirmed { background: #d4edda; color: #155724; }
+    .badge-declined { background: #f8d7da; color: #721c24; }
+    .badge-bus { background: #e8f4fd; color: #0d6efd; }
+
+    .btn {
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+      font-family: inherit;
+    }
+    .btn-olive { background: var(--olive); color: #fff; }
+    .btn-olive:hover { background: var(--olive-dark); }
+    .btn-burgundy { background: var(--burgundy); color: #fff; }
+    .btn-burgundy:hover { opacity: 0.92; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: #f2efe9; }
+    .btn-sm { padding: 5px 12px; font-size: 12px; }
+
+    .container { max-width: 1240px; margin: 0 auto; padding: 28px 24px; }
+    
+    /* Login */
+    .login-wrapper {
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .login-card {
+      background: #ffffff;
+      padding: 44px 38px;
+      border-radius: 28px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.06);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    .login-card h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 38px;
+      color: var(--olive);
+      margin-bottom: 6px;
+    }
+    .login-card p {
+      color: var(--text-muted);
+      font-size: 13.5px;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .form-group { text-align: left; margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--olive); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+      background: #fff;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--olive);
+    }
+
+    /* Metric Cards */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.02);
+    }
+    .metric-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .metric-value { font-family: 'Instrument Serif', serif; font-size: 46px; color: var(--burgundy); line-height: 1; }
+    .metric-sub { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 12px; overflow-x: auto; }
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      background: var(--olive);
+      color: #fff;
+    }
+    .tab-btn:hover:not(.active) {
+      background: #ece8df;
+      color: var(--text);
+    }
+
+    /* Controls Bar (Search + Filters) */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .search-input {
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      outline: none;
+      width: 260px;
+      font-family: inherit;
+    }
+    .search-input:focus { border-color: var(--olive); }
+
+    /* Tables */
+    .table-card {
+      background: #fff;
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    th {
+      background: #f8f6f0;
+      padding: 14px 18px;
+      font-weight: 700;
+      color: var(--olive);
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    td { padding: 13px 18px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background-color: #faf9f5; }
+
+    .code-pill {
+      font-family: monospace;
+      font-weight: 700;
+      background: #f1ede3;
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: var(--burgundy);
+      letter-spacing: 0.5px;
+    }
+
+    /* Progress bar */
+    .progress-bar-container {
+      background: #eeebe3;
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+      margin: 8px 0;
+      width: 100%;
+    }
+    .progress-bar-fill {
+      background: var(--burgundy);
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #ffffff;
+      border-radius: 26px;
+      padding: 34px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Vista Login con Código Secreto Maestro -->
+  <div id="login-view" class="login-wrapper">
+    <div class="login-card">
+      <h2>Mari & Simón</h2>
+      <p>Acceso exclusivo al Back Office de la Boda</p>
+      <form id="login-form">
+        <div class="form-group">
+          <label style="text-align: center;">CÓDIGO SECRETO *</label>
+          <input 
+            type="password" 
+            id="login-secret" 
+            required 
+            placeholder="Ingresá el código secreto"
+            autocomplete="current-password"
+            style="text-align: center; font-size: 16px; letter-spacing: 2px;"
+          />
+        </div>
+        <div id="login-error" style="color: #c53030; font-size: 12.5px; margin-bottom: 16px; display: none;"></div>
+        <button type="submit" class="btn btn-burgundy" style="width: 100%; justify-content: center; padding: 13px;">
+          Entrar al Back Office ➔
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Vista Dashboard -->
+  <div id="dashboard-view" style="display: none;">
+    <header>
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span class="logo">Mari & Simón</span>
+        <span style="font-size: 12px; color: var(--text-muted);">| Panel de Boda & Back Office</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="/" target="_blank" class="btn btn-outline btn-sm">Ver Sitio Web ↗</a>
+        <button id="logout-btn" class="btn btn-outline btn-sm">Cerrar Sesión</button>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Métricas Principales -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Pases Confirmados</div>
+          <div class="metric-value" id="metric-confirmed">0</div>
+          <div class="metric-sub" id="metric-confirmed-inv">0 invitaciones de <span id="metric-total-inv">0</span></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Asientos de Bus Reservados</div>
+          <div class="metric-value" id="metric-bus">0</div>
+          <div class="metric-sub" id="metric-bus-avail">Disponibles: 45</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Menúes Especiales</div>
+          <div class="metric-value" id="metric-dietary-count">0</div>
+          <div class="metric-sub" id="metric-dietary-desc">Sin restricciones</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">No Podrán Asistir</div>
+          <div class="metric-value" id="metric-declined">0</div>
+          <div class="metric-sub">Respuestas recibidas</div>
+        </div>
+      </div>
+
+      <!-- Pestañas -->
+      <div class="tabs">
+        <button class="tab-btn active" id="btn-tab-invitations" onclick="switchTab('invitations')">
+          👥 Códigos e Invitados
+        </button>
+        <button class="tab-btn" id="btn-tab-bus" onclick="switchTab('bus')">
+          🚌 Gestión de Bus & Pasajeros
+        </button>
+        <button class="tab-btn" id="btn-tab-rsvps" onclick="switchTab('rsvps')">
+          📋 Respuestas RSVP Completas
+        </button>
+      </div>
+
+      <!-- Pestaña 1: Invitados y Códigos -->
+      <div id="tab-invitations">
+        <div class="controls-bar">
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="inv-search" class="search-input" placeholder="🔍 Buscar por nombre o código..." oninput="filterInvitations()" />
+            <select id="inv-filter-status" onchange="filterInvitations()" style="padding: 9px 12px; border-radius: 999px; border: 1px solid var(--border); font-size: 13px; outline: none;">
+              <option value="all">Todos los estados</option>
+              <option value="confirmed">Confirmados</option>
+              <option value="pending">Pendientes</option>
+              <option value="declined">No asisten</option>
+            </select>
+          </div>
+          <button class="btn btn-olive" onclick="openCreateModal()">+ Crear Nueva Invitación</button>
+        </div>
+
+        <div class="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Invitado / Familia</th>
+                <th>Pases Máx.</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="invitations-table-body">
+              <tr><td colspan="5" style="text-align: center; padding: 24px;">Cargando lista de invitados...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pestaña 2: Gestión de Bus & Pasajeros (Avanzada) -->
+      <div id="tab-bus" style="display: none;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-bottom: 24px;">
+          <!-- Resumen de Capacidad del Bus -->
+          <div class="metric-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div class="metric-label">Capacidad del Bus (Mendoza ⇄ Potrerillos)</div>
+              <button class="btn btn-outline btn-sm" onclick="editBusCapacity()">⚙️ Configurar</button>
+            </div>
+            <div style="display: flex; align-items: baseline; gap: 12px; margin: 10px 0;">
+              <div class="metric-value" id="bus-occupied-seats">0</div>
+              <span style="font-size: 18px; color: var(--text-muted);">/ <span id="bus-total-capacity">45</span> asientos reservados</span>
+            </div>
+            <div class="progress-bar-container">
+              <div id="bus-progress-bar" class="progress-bar-fill" style="width: 0%;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-top: 6px;">
+              <span>Libres: <strong id="bus-free-seats" style="color: #2e7d32;">45</strong> asientos</span>
+              <span id="bus-percent-text">0% ocupado</span>
+            </div>
+          </div>
+
+          <!-- Información del Itinerario del Bus -->
+          <div class="metric-card">
+            <div class="metric-label">Itinerario y Puntos de Encuentro</div>
+            <div style="margin-top: 10px; font-size: 13.5px; line-height: 1.6;">
+              <p>📍 <strong>Punto de Salida:</strong> Plaza General Espejo, Mendoza Capital</p>
+              <p>⏰ <strong>Horario de Salida:</strong> 14:00 hs (Puntual)</p>
+              <p>🏁 <strong>Destino:</strong> La Martineta, Potrerillos</p>
+              <p>🌙 <strong>Regreso:</strong> 02:30 hs rumbo a Mendoza Capital</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls-bar">
+          <h3 style="font-size: 18px; color: var(--olive);">Manifiesto de Pasajeros de Bus</h3>
+          <a href="/api/bus/export/csv" class="btn btn-burgundy">📥 Descargar Manifiesto para el Chofer (CSV)</a>
+        </div>
+
+        <div class="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>Titular</th>
+                <th>Código</th>
+                <th>Asientos Reservados</th>
+                <th>Punto de Salida</th>
+                <th>Horario</th>
+                <th>Check-in / Abordo</th>
+              </tr>
+            </thead>
+            <tbody id="bus-table-body">
+              <tr><td colspan="6" style="text-align: center; padding: 24px;">Cargando lista de pasajeros del bus...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pestaña 3: Respuestas RSVP Completas -->
+      <div id="tab-rsvps" style="display: none;">
+        <div class="controls-bar">
+          <div>
+            <h3 style="font-size: 18px; color: var(--olive);">Todas las Confirmaciones Registradas</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Respuestas recibidas a través de la web</p>
+          </div>
+          <a href="/api/export/csv" class="btn btn-burgundy">📥 Descargar Excel Completo (CSV)</a>
+        </div>
+
+        <div class="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Código</th>
+                <th>¿Asiste?</th>
+                <th>Pases</th>
+                <th>Menú</th>
+                <th>Bus</th>
+                <th>Dedicatoria</th>
+                <th>Fecha</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="rsvps-table-body">
+              <tr><td colspan="9" style="text-align: center; padding: 24px;">Cargando respuestas...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Crear Código -->
+  <div id="create-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+        <h3 style="color:var(--olive); font-family:'Instrument Serif', serif; font-size:28px;">Nueva Invitación</h3>
+        <button onclick="closeCreateModal()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+      </div>
+
+      <form id="create-inv-form">
+        <div class="form-group">
+          <label>Nombre del invitado o familia *</label>
+          <input type="text" id="inv-name" required placeholder="Ej: Familia Gómez" />
+        </div>
+        <div class="form-group">
+          <label>Código exclusivo *</label>
+          <input type="text" id="inv-code" required placeholder="Ej: GOMEZ2027" style="text-transform:uppercase;" />
+        </div>
+        <div class="form-group">
+          <label>Cantidad máxima de pases *</label>
+          <select id="inv-passes">
+            <option value="1">1 pase (Individual)</option>
+            <option value="2" selected>2 pases (Pareja)</option>
+            <option value="3">3 pases</option>
+            <option value="4">4 pases (Familia)</option>
+            <option value="5">5 pases</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Notas internas / Mesa (Opcional)</label>
+          <input type="text" id="inv-notes" placeholder="Ej: Mesa amigos de Simón" />
+        </div>
+        <button type="submit" class="btn btn-olive" style="width:100%; justify-content:center; padding:12px;">Guardar y Crear</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Ficha de Detalle de Invitado -->
+  <div id="detail-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="color:var(--olive); font-family:'Instrument Serif', serif; font-size:28px;">Detalle del Invitado</h3>
+        <button onclick="closeDetailModal()" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+      </div>
+
+      <div id="detail-modal-content" style="font-size: 14px; line-height: 1.6;">
+        <!-- Se llena dinámicamente -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allInvitations = [];
+    let allRsvps = [];
+    let currentToken = localStorage.getItem('admin_token');
+
+    if (currentToken) {
+      showDashboard();
+    }
+
+    // Login con Código Secreto Maestro
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const code = document.getElementById('login-secret').value.trim();
+      const errEl = document.getElementById('login-error');
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ secretCode: code })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          localStorage.setItem('admin_token', data.token);
+          currentToken = data.token;
+          showDashboard();
+        } else {
+          errEl.innerText = data.error || 'Código incorrecto';
+          errEl.style.display = 'block';
+        }
+      } catch (err) {
+        errEl.innerText = 'Error al conectar con el servidor backend.';
+        errEl.style.display = 'block';
+      }
+    });
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('admin_token');
+      currentToken = null;
+      document.getElementById('dashboard-view').style.display = 'none';
+      document.getElementById('login-view').style.display = 'flex';
+    });
+
+    function showDashboard() {
+      document.getElementById('login-view').style.display = 'none';
+      document.getElementById('dashboard-view').style.display = 'block';
+      loadStats();
+      loadInvitations();
+      loadBusManifest();
+      loadRsvps();
+    }
+
+    // Pestañas
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-invitations').style.display = tab === 'invitations' ? 'block' : 'none';
+      document.getElementById('tab-bus').style.display = tab === 'bus' ? 'block' : 'none';
+      document.getElementById('tab-rsvps').style.display = tab === 'rsvps' ? 'block' : 'none';
+
+      document.getElementById(`btn-tab-${tab}`).classList.add('active');
+
+      if (tab === 'invitations') loadInvitations();
+      if (tab === 'bus') loadBusManifest();
+      if (tab === 'rsvps') loadRsvps();
+    }
+
+    // Cargar Estadísticas
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const d = await res.json();
+        document.getElementById('metric-confirmed').innerText = d.totalConfirmedPasses || 0;
+        document.getElementById('metric-confirmed-inv').innerText = `${d.confirmedInvitations || 0} invitaciones`;
+        document.getElementById('metric-total-inv').innerText = d.totalInvitations || 0;
+        document.getElementById('metric-bus').innerText = d.busRequired || 0;
+        document.getElementById('metric-bus-avail').innerText = `Disponibles: ${d.busAvailable || 0} de ${d.busCapacity || 45}`;
+        document.getElementById('metric-declined').innerText = d.declinedCount || 0;
+
+        let dietarySummary = [];
+        if (d.dietary?.celiac) dietarySummary.push(`${d.dietary.celiac} celíacos`);
+        if (d.dietary?.vegetarian) dietarySummary.push(`${d.dietary.vegetarian} vegetarianos`);
+        if (d.dietary?.vegan) dietarySummary.push(`${d.dietary.vegan} veganos`);
+        document.getElementById('metric-dietary-count').innerText = (d.dietary?.celiac || 0) + (d.dietary?.vegetarian || 0) + (d.dietary?.vegan || 0);
+        document.getElementById('metric-dietary-desc').innerText = dietarySummary.join(', ') || 'Sin restricciones especiales';
+      } catch (err) {
+        console.error('Error stats:', err);
+      }
+    }
+
+    // Cargar Invitaciones
+    async function loadInvitations() {
+      const tbody = document.getElementById('invitations-table-body');
+      try {
+        const res = await fetch('/api/invitations');
+        allInvitations = await res.json();
+        renderInvitations(allInvitations);
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Error al cargar las invitaciones</td></tr>';
+      }
+    }
+
+    function renderInvitations(list) {
+      const tbody = document.getElementById('invitations-table-body');
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #888; padding: 24px;">No se encontraron invitaciones.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(inv => `
+        <tr>
+          <td><span class="code-pill">${inv.code}</span></td>
+          <td>
+            <strong>${inv.guestName}</strong>
+            ${inv.notes ? `<div style="font-size:11px; color:#888;">${inv.notes}</div>` : ''}
+          </td>
+          <td>${inv.maxPasses} ${inv.maxPasses === 1 ? 'pase' : 'pases'}</td>
+          <td>
+            <span class="badge badge-${inv.status}">
+              ${inv.status === 'confirmed' ? '✓ Confirmado' : inv.status === 'declined' ? '✗ No asiste' : '⏳ Pendiente'}
+            </span>
+          </td>
+          <td style="display: flex; gap: 8px; align-items: center;">
+            <button class="btn btn-outline btn-sm" onclick="openGuestDetail('${inv.code}')">
+              👁️ Detalle
+            </button>
+            <button class="btn btn-outline btn-sm" onclick="copyWhatsAppMessage('${inv.guestName}', '${inv.code}', ${inv.maxPasses})">
+              📱 WhatsApp
+            </button>
+            <button onclick="deleteInvitation('${inv.id}')" style="background:none; border:none; color:#c00; cursor:pointer; font-size:15px; margin-left:6px;" title="Eliminar">🗑</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterInvitations() {
+      const query = document.getElementById('inv-search').value.toLowerCase().trim();
+      const status = document.getElementById('inv-filter-status').value;
+
+      const filtered = allInvitations.filter(inv => {
+        const matchesQuery = inv.guestName.toLowerCase().includes(query) || inv.code.toLowerCase().includes(query);
+        const matchesStatus = status === 'all' || inv.status === status;
+        return matchesQuery && matchesStatus;
+      });
+      renderInvitations(filtered);
+    }
+
+    // Modal de Detalle Completo del Invitado
+    function openGuestDetail(code) {
+      const inv = allInvitations.find(i => i.code === code);
+      const rsvp = allRsvps.find(r => r.code === code);
+      if (!inv && !rsvp) return;
+
+      const name = inv?.guestName || rsvp?.name || 'Invitado';
+      const modal = document.getElementById('detail-modal');
+      const content = document.getElementById('detail-modal-content');
+
+      content.innerHTML = `
+        <div style="background:#faf8f4; border:1px solid var(--border); border-radius:18px; padding:20px; margin-bottom:16px;">
+          <div style="font-size:11px; text-transform:uppercase; color:#888; font-weight:700;">Invitado / Familia</div>
+          <h2 style="font-family:'Instrument Serif',serif; font-size:28px; color:var(--olive); margin:2px 0 10px;">${name}</h2>
+          <p><strong>Código:</strong> <span class="code-pill">${code}</span></p>
+          <p><strong>Pases asignados:</strong> ${inv?.maxPasses || rsvp?.guestsCount || 1}</p>
+          <p><strong>Estado:</strong> <span class="badge badge-${inv?.status || (rsvp?.attending === 'yes' ? 'confirmed' : 'declined')}">${inv?.status || rsvp?.attending}</span></p>
+          ${inv?.notes ? `<p><strong>Notas internas:</strong> ${inv.notes}</p>` : ''}
+        </div>
+
+        ${rsvp ? `
+          <div style="background:#fff; border:1px solid var(--border); border-radius:18px; padding:20px; margin-bottom:16px;">
+            <h4 style="font-size:14px; color:var(--olive); text-transform:uppercase; margin-bottom:8px;">Datos de Confirmación RSVP</h4>
+            <p><strong>¿Asiste?:</strong> ${rsvp.attending === 'yes' ? '🎉 Sí, asistirá' : 'No asistirá'}</p>
+            <p><strong>Pases confirmados:</strong> ${rsvp.guestsCount}</p>
+            <p><strong>Menú:</strong> ${rsvp.dietary}</p>
+            <p><strong>Bus Mendoza-Potrerillos:</strong> ${rsvp.needBus === 'yes' ? `🚌 Sí (${rsvp.busSeats || rsvp.guestsCount} asientos)` : 'No'}</p>
+            ${rsvp.message ? `<p><strong>Dedicatoria:</strong> <em>"${rsvp.message}"</em></p>` : ''}
+            <p style="font-size:11px; color:#888; margin-top:8px;">Confirmado el: ${new Date(rsvp.createdAt).toLocaleString()}</p>
+          </div>
+        ` : `
+          <div style="padding:12px; background:#fff8e6; border-radius:12px; font-size:13px; color:#856404; margin-bottom:16px;">
+            ⏳ Aún no ha enviado su confirmación a través de la web.
+          </div>
+        `}
+
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button class="btn btn-outline" onclick="copyWhatsAppMessage('${name}', '${code}', ${inv?.maxPasses || 2})">📱 Copiar WhatsApp</button>
+          <button class="btn btn-olive" onclick="closeDetailModal()">Cerrar</button>
+        </div>
+      `;
+
+      modal.style.display = 'flex';
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detail-modal').style.display = 'none';
+    }
+
+    // Cargar Manifiesto de Bus
+    async function loadBusManifest() {
+      const tbody = document.getElementById('bus-table-body');
+      try {
+        const res = await fetch('/api/bus/manifest');
+        const data = await res.json();
+
+        document.getElementById('bus-occupied-seats').innerText = data.reservedSeats;
+        document.getElementById('bus-total-capacity').innerText = data.totalCapacity;
+        document.getElementById('bus-free-seats').innerText = data.availableSeats;
+        document.getElementById('bus-percent-text').innerText = `${data.occupancyPercent}% ocupado`;
+        document.getElementById('bus-progress-bar').style.width = `${data.occupancyPercent}%`;
+
+        const passengers = data.passengers || [];
+        if (passengers.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #888; padding: 24px;">No hay pasajeros reservados para el bus todavía.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = passengers.map(p => {
+          const seats = p.busSeats || p.guestsCount || 1;
+          return `
+            <tr>
+              <td><strong>${p.name}</strong></td>
+              <td><span class="code-pill">${p.code || '-'}</span></td>
+              <td><span class="badge badge-bus">🚌 ${seats} ${seats === 1 ? 'asiento' : 'asientos'}</span></td>
+              <td>Plaza General Espejo</td>
+              <td>14:00 hs</td>
+              <td>
+                <button class="btn ${p.boardedBus ? 'btn-olive' : 'btn-outline'} btn-sm" onclick="toggleBoarded('${p.id}', ${!p.boardedBus})">
+                  ${p.boardedBus ? '✓ Abordado' : '⏳ Marcar Abordo'}
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Error al cargar el manifiesto del bus</td></tr>';
+      }
+    }
+
+    async function toggleBoarded(id, status) {
+      await fetch(`/api/rsvps/${id}/boarded`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ boarded: status })
+      });
+      loadBusManifest();
+    }
+
+    async function editBusCapacity() {
+      const current = document.getElementById('bus-total-capacity').innerText;
+      const nueva = prompt('Ingresá la capacidad total de asientos del bus:', current);
+      if (nueva && !isNaN(nueva)) {
+        await fetch('/api/bus/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ totalCapacity: Number(nueva) })
+        });
+        loadBusManifest();
+        loadStats();
+      }
+    }
+
+    // Copiar mensaje para WhatsApp
+    function copyWhatsAppMessage(name, code, passes) {
+      const text = `¡Hola ${name}! 💛\nQueremos que seas parte de nuestra boda este 03 de Abril de 2027 en Potrerillos, Mendoza.\n\nPreparamos nuestra web para que puedas ver todos los detalles y confirmar tus ${passes} pases:\n👉 https://bodamariysimon.online/?code=${code}\n\nTu código exclusivo de confirmación es: *${code}*\n\n¡Esperamos celebrar juntos! Mari & Simón`;
+      navigator.clipboard.writeText(text);
+      alert(`¡Mensaje para ${name} copiado al portapapeles!\n\nEnlace con código: ?code=${code}\nListo para pegar en WhatsApp.`);
+    }
+
+    // Modal Crear Invitación
+    function openCreateModal() { document.getElementById('create-modal').style.display = 'flex'; }
+    function closeCreateModal() { document.getElementById('create-modal').style.display = 'none'; }
+
+    document.getElementById('create-inv-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        guestName: document.getElementById('inv-name').value,
+        code: document.getElementById('inv-code').value,
+        maxPasses: document.getElementById('inv-passes').value,
+        notes: document.getElementById('inv-notes').value
+      };
+
+      const res = await fetch('/api/invitations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        closeCreateModal();
+        e.target.reset();
+        loadInvitations();
+        loadStats();
+      } else {
+        const err = await res.json();
+        alert(err.error || 'Error al crear');
+      }
+    });
+
+    async function deleteInvitation(id) {
+      if (!confirm('¿Seguro que deseas eliminar este código?')) return;
+      await fetch('/api/invitations/' + id, { method: 'DELETE' });
+      loadInvitations();
+      loadStats();
+    }
+
+    // Cargar RSVPs
+    async function loadRsvps() {
+      const tbody = document.getElementById('rsvps-table-body');
+      try {
+        const res = await fetch('/api/rsvps');
+        const data = await res.json();
+        allRsvps = data.rsvps || [];
+
+        if (allRsvps.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #888; padding: 24px;">No hay confirmaciones registradas aún.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = allRsvps.map(r => `
+          <tr>
+            <td><strong>${r.name}</strong></td>
+            <td><span class="code-pill">${r.code || '-'}</span></td>
+            <td>
+              <span class="badge ${r.attending === 'yes' ? 'badge-confirmed' : 'badge-declined'}">
+                ${r.attending === 'yes' ? 'Asiste' : 'No Asiste'}
+              </span>
+            </td>
+            <td>${r.guestsCount || 1}</td>
+            <td>${r.dietary === 'celiac' ? '🍞 Celíaco' : r.dietary === 'vegetarian' ? '🥗 Vegetariano' : r.dietary === 'vegan' ? '🌱 Vegano' : 'Estándar'}</td>
+            <td>${r.needBus === 'yes' ? `🚌 Sí (${r.busSeats || r.guestsCount})` : 'No'}</td>
+            <td><em>${r.message || '-'}</em></td>
+            <td style="color: var(--text-muted); font-size: 11px;">${new Date(r.createdAt).toLocaleDateString()}</td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="openGuestDetail('${r.code}')">👁️ Ficha</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: red;">Error al cargar respuestas</td></tr>';
+      }
+    }
+  </script>
+</body>
+</html>

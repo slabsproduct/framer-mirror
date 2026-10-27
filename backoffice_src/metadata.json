@@ -1,0 +1,8 @@
+{
+  "name": "Boda detalle - back office",
+  "description": "Portal oficial de confirmación de asistencia (RSVP) y back office integral de gestión de reservas para la boda de Mari & Simón.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

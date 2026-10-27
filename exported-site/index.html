@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boda Mari y Simon - Mendoza 2027</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS styles extracted from the Framer website */
+        :root {
+            --primary: #363b1f;
+            --secondary: #6e0d23;
+            --accent: #4285f4;
+            --light: #f8f9fa;
+            --dark: #202124;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: var(--dark); }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; }
+        
+        /* Navigación */
+        nav { padding: 20px; background: var(--primary); }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 24px; color: white; }
+        .nav-links a { color: white; margin-left: 20px; font-weight: 500; }
+        .nav-links a:hover { color: #6e0d23; }
+        
+        /* Hero / Main */
+        .hero { padding: 80px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
+        .hero h1 { font-size: 48px; margin-bottom: 20px; }
+        .hero p { font-size: 18px; color: #666; margin-bottom: 40px; }
+        
+        .fechas { background: #f5f5f5; padding: 40px; margin: 40px 0; border-radius: 12px; }
+        .fechas h2 { font-size: 32px; margin-bottom: 20px; }
+        .fecha-info { display: inline-block; margin: 0 20px; }
+        
+        .ubicacion { margin: 40px 0; }
+        .ubicacion h2 { font-size: 32px; margin-bottom: 20px; }
+        .mapa { height: 400px; width: 100%; border-radius: 12px; margin-top: 20px; }
+        
+        /* RSVP */
+        .rsvp { max-width: 800px; margin: 0 auto; padding: 40px; }
+        .rsvp h2 { font-size: 32px; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+        .btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .btn-secondary { background: #fff; color: var(--primary); border: 2px solid var(--primary); }
+        
+        .code-info { background: #f0f7f0; padding: 20px; border-radius: 8; margin: 20px 0; border: 1px solid #c3e6cb; }
+        .code-example { font-family: 'Playfair Display', serif; background: #fff; padding: 10px; border-radius: 4; margin: 10px 0; border: 1px solid #eee; }
+        
+        /* Secciones */
+        .section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; }
+        .section h2 { margin-bottom: 30px; }
+        
+        /* Footer */
+        footer { padding: 40px 20px; background: var(--primary); color: white; text-align: center; }
+        .footer-links a { color: white; margin: 0 15px; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 32px; }
+            .fecha-info { display: block; margin: 10px 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Nav -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Boda Mari y Simon</div>
+            <div class="nav-links">
+                <a href="#rsvp">RSVP</a>
+                <a href="#ubicacion">Ubicación</a>
+                <a href="#cronograma">Cronograma</a>
+                <a href="#faqs">FAQs</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Celebrando el amor</h1>
+        <p>Mari y Simon comparten la alegría de comenzar un nuevo viaje juntos</p>
+        <p>Sábado 03 de Abril del 2027 · 15:30hs</p>
+    </section>
+
+    <!-- Fechas y Cronograma -->
+    <section class="section">
+        <h2>Fechas Importantes</h2>
+        <div class="fechas">
+            <div class="fecha-info">
+                <strong>Boda:</strong> Sábado 03 de Abril del 2027
+            </div>
+            <div class="fecha-info">
+                <strong>Ceremonia:</strong> 15:30hs
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="cronograma">
+        <h2>Cronograma del Evento</h2>
+        <p>Detalles del cronograma de la boda</p>
+    </section>
+
+    <!-- Ubicación -->
+    <section class="section" id="ubicacion">
+        <h2>Ubicación</h2>
+        <p>La Martineta RN7, Km 1089,5, Potrerillos, Mendoza, Argentina</p>
+        <iframe class="mapa" src="https://www.google.com/maps/embed?pb=!4v1688493214567!6i13312!6i6624!4f13.72!5i-1000000!4e0!3e0!3m2!1s0x94d800b9e3e0e0ab%3A0x5c1f3d7b3f0f5f0f!2sLa%20Martineta%20RN7%2C%20Km%201089%2C5%2C%20Potrerillos%2C%20Mendoza%2C%20Argentina!5e0!3m2!1ses!2sar!4v1688493214567!5i-1000000" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </section>
+
+    <!-- RSVP Section -->
+    <section class="rsvp" id="rsvp">
+        <h2>Confirma tu Asistencia</h2>
+        <form id="rsvp-form">
+            <div class="form-group">
+                <label>Nombre completo</label>
+                <input type="text" placeholder="Ej: Juan Pérez" required>
+            </div>
+            <div class="form-group">
+                <label>Código de invitación (Opcional)</label>
+                <input type="text" placeholder="Ej: MARISIMON" style="text-transform: uppercase;">
+                <div class="code-info">
+                    <strong>¿Cómo funciona?</strong> Ingresa tu código único para ver tus pases reservados y restricciones de menú.
+                </div>
+            </div>
+            <div class="form-group">
+                <label>¿ASISTIRÁS?</label>
+                <select>
+                    <option value="yes">Sí, asistiré</option>
+                    <option value="no">No podré asistir</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Número de personas</label>
+                <select>
+                    <option value="1">1 persona</option>
+                    <option value="2">2 personas</option>
+                    <option value="3">3 personas</option>
+                    <option value="4">4 personas (familia)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Confirmar Asistencia</button>
+            <button type="button" class="btn-secondary">Olvidaste tu código?</button>
+        </form>
+    </section>
+
+    <!-- Código de Invitación -->
+    <section class="section" style="background: #f5f5f5;">
+        <div class="code-info">
+            <h3>Código de Invitación</h3>
+            <p>Tu tarjeta impresa o digital contiene un código exclusivo (ej: MARISIMON). Al ingresarlo en la sección de RSVP, se mostrarán tus pases reservados.</p>
+            <div class="code-example">MARISIMON</div>
+            <p>También disponible en la tarjeta física o el email de invitación.</p>
+        </div>
+    </section>
+
+    <!-- Guía de Viaje -->
+    <section class="section" style="background: #f5f5f5;">
+        <h2>Guía de Viaje para Mendoza</h2>
+        <p>También creamos una guía de viaje para los que disfruten Mendoza.</p>
+    </section>
+
+    <!-- Código de Vestimenta -->
+    <section class="section" style="background: #f5f5f5;">
+        <h2>Código de Vestimenta</h2>
+        <h3>Mujeres:</h3>
+        <p>Vestido largo. Nos encantan los vestidos fluidos, los estampados y los colores que acompañan una celebración de día. Por las características del lugar, les recomendamos elegir un calzado cómodo. El blanco está reservado para la novia.</h3>
+        <h3>Hombres:</h3>
+        <p>Elegantes, pero relajados. Pueden optar por pantalón de vestir o de lino, camisa y zapatos o mocasines. El traje completo y la corbata no son necesarios. El beige y gris claro están reservados para el novio.</p>
+    </section>
+
+    <!-- FAQs -->
+    <section class="section" id="faqs">
+        <h2>Preguntas Frecuentes</h2>
+        <div class="faq-item">
+            <h3>¿Hasta cuándo tengo tiempo para confirmar mi asistencia?</h3>
+            <p>Por favor, confírmanos antes del 03 de Febrero de 2027.</p>
+        </div>
+        <div class="faq-item">
+            <h3>¿Cómo funciona el código único de invitación?</h3>
+            <p>Tu tarjeta impresa o digital contiene un código exclusivo (ej: MARISIMON). Al ingresarlo en la sección de RSVP, se mostrarán tus pases reservados.</p>
+        </div>
+        <div class="faq-item">
+            <h3>¿Habrá estacionamiento disponible?</h3>
+            <p>Sí, La Martineta cuenta con amplio estacionamiento vigilado privado de cortesía para todos los invitados.</p>
+        </div>
+        <div class="faq-item">
+            <h3>¿Cómo me traslado hacia el lugar?</h3>
+            <p>Si necesitas transporte tendremos Vans desde Mendoza Capital. Si necesitas Uber, recomendamos dejar programado ya que no hay buena señal en el embalse.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#rsvp">Confirma tu asistencia</a>
+            <a href="#ubicacion">Ver ubicación</a>
+            <a href="#faqs">Preguntas frecuentes</a>
+            <a href="#cronograma">Cronograma</a>
+        </div>
+        <p>© 2024 Boda Mari y Simon. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

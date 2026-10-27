@@ -1,0 +1,247 @@
+/* Ocultar badge y barras de Framer */
+#__framer-badge-container,
+.__framer-badge,
+#__framer-editorbar,
+[data-framer-name="Badge"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+
+/* Modal RSVP con diseño coherente a Framer */
+.rsvp-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2147483640;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.rsvp-modal-card {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 28px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 36px 32px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
+  animation: rsvpFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: -apple-system, BlinkMacSystemFont, "DM Sans", "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+@keyframes rsvpFadeIn {
+  from { opacity: 0; transform: scale(0.92) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.rsvp-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #f4f3ef;
+  border: none;
+  font-size: 22px;
+  color: #666;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.2s;
+}
+
+.rsvp-close-btn:hover {
+  background: #e5e3dc;
+  color: #111;
+}
+
+.rsvp-badge-pill {
+  display: inline-block;
+  background: #f0eee6;
+  color: #6e0d23;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.bo-header-btn {
+  font-size: 11px;
+  font-weight: 700;
+  color: #363b1f;
+  background-color: #f7f5ef;
+  border: 1px solid #dcd8cf;
+  padding: 4px 12px;
+  border-radius: 999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+
+.bo-header-btn:hover {
+  background-color: #6e0d23;
+  color: #ffffff;
+  border-color: #6e0d23;
+}
+
+.rsvp-header h3 {
+  font-family: 'Melagu Regular', 'Instrument Serif', Georgia, serif;
+  font-size: 32px;
+  color: #363b1f;
+  margin: 0 0 8px 0;
+  text-align: center;
+}
+
+.rsvp-header p {
+  color: #666;
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin: 0 0 24px 0;
+  text-align: center;
+}
+
+.guest-welcome-badge {
+  background: #fbf9f5;
+  border: 1px solid #e7e3d8;
+  border-radius: 18px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.guest-welcome-badge span {
+  display: block;
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.guest-welcome-badge strong {
+  display: block;
+  font-size: 20px;
+  color: #6e0d23;
+  font-family: 'Melagu Regular', Georgia, serif;
+}
+
+.guest-welcome-badge small {
+  display: inline-block;
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-top: 6px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #363b1f;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.form-group input[type="text"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #dcd8cf;
+  font-size: 14px;
+  box-sizing: border-box;
+  font-family: inherit;
+  outline: none;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #363b1f;
+}
+
+.radio-group {
+  display: flex;
+  gap: 12px;
+}
+
+.radio-label {
+  flex: 1;
+  padding: 12px 10px;
+  border: 1px solid #dcd8cf;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #faf9f6;
+  transition: all 0.2s;
+}
+
+.radio-label:hover {
+  background-color: #f1eeec;
+}
+
+.code-feedback-error {
+  margin-top: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background-color: #fde8e8;
+  color: #c53030;
+  border: 1px solid #f8b4b4;
+  font-size: 13px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.rsvp-submit-btn {
+  width: 100%;
+  background-color: #6e0d23;
+  color: #ffffff;
+  padding: 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 16px rgba(110, 13, 35, 0.3);
+  margin-top: 8px;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.rsvp-submit-btn:hover {
+  opacity: 0.93;
+}
+
+.rsvp-submit-btn:active {
+  transform: scale(0.99);
+}

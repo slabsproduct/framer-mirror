@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1",
+    "code": "MARISIMON",
+    "guestName": "Mari & Simón (Novios)",
+    "maxPasses": 2,
+    "status": "confirmed"
+  },
+  {
+    "id": "2",
+    "code": "FAMILIAPEREZ",
+    "guestName": "Familia Pérez",
+    "maxPasses": 4,
+    "status": "pending"
+  },
+  {
+    "id": "4",
+    "code": "INVITADO1",
+    "guestName": "Amigo Especial",
+    "maxPasses": 1,
+    "status": "pending"
+  }
+]

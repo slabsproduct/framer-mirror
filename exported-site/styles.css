@@ -1,0 +1,63 @@
+﻿/* Framer Export CSS for Boda Mari y Simon */
+:root {
+    --primary: #363b1f;
+    --secondary: #6e0d23;
+    --accent: #4285f4;
+    --light: #f8f9fa;
+    --dark: #202124;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; line-height: 1.6; color: var(--dark); }
+h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+/* Header */
+nav { padding: 20px; background: var(--primary); }
+.nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: 'Playfair Display', serif; font-size: 24px; color: white; }
+.nav-links a { color: white; margin-left: 20px; font-weight: 500; }
+.nav-links a:hover { color: #6e0d23; }
+
+/* Hero */
+.hero { padding: 80px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
+.hero h1 { font-size: 48px; margin-bottom: 20px; color: var(--dark); }
+.hero p { font-size: 18px; color: #666; margin-bottom: 40px; }
+
+/* Fechas */
+.fechas { background: #f5f5f5; padding: 40px; margin: 40px 0; border-radius: 12px; }
+.fechas h2 { font-size: 32px; margin-bottom: 20px; color: var(--dark); }
+.fecha-info { display: inline-block; margin: 0 20px; }
+
+/* Ubicación */
+.ubicacion { margin: 40px 0; }
+.ubicacion h2 { font-size: 32px; margin-bottom: 20px; color: var(--dark); }
+.mapa { height: 400px; width: 100%; border-radius: 12px; margin-top: 20px; border: 1px solid #ddd; }
+
+/* RSVP */
+.rsvp { max-width: 800px; margin: 0 auto; padding: 40px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.rsvp h2 { font-size: 32px; margin-bottom: 30px; color: var(--dark); }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+.form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+.btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
+.btn-secondary { width: 100%; padding: 14px; background: #fff; color: var(--primary); border: 2px solid var(--primary); font-size: 16px; cursor: pointer; }
+
+/* Code info */
+.code-info { background: #f0f7f0; padding: 20px; border-radius: 8; margin: 20px 0; border: 1px solid #c3e6cb; }
+.code-example { font-family: 'Playfair Display', serif; background: #fff; padding: 10px; border-radius: 4; margin: 10px 0; border: 1px solid #eee; text-align: center; }
+
+/* Secciones */
+.section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; }
+.section h2 { margin-bottom: 30px; font-size: 32px; color: var(--dark); }
+
+/* Footer */
+footer { padding: 40px 20px; background: var(--primary); color: white; text-align: center; }
+.footer-links a { color: white; margin: 0 15px; }
+.footer-links a:hover { color: #cecece; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hero h1 { font-size: 32px; }
+    .fecha-info { display: block; margin: 10px 0; }
+}

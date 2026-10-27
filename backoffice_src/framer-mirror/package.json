@@ -1,0 +1,19 @@
+{
+  "name": "framer-mirror",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Framer mirror and crawler for Mari & Simón Wedding Landing",
+  "main": "src/mirror/app.js",
+  "scripts": {
+    "crawl": "node src/crawler/crawler.js",
+    "dev": "vite src/mirror",
+    "build": "vite build src/mirror --outDir ../dist --base ./"
+  },
+  "keywords": ["framer", "mirror", "crawler", "wedding"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "playwright": "^1.64.1",
+    "vite": "^8.3.5"
+  }
+}

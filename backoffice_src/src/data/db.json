@@ -1,0 +1,104 @@
+{
+  "invitations": [
+    {
+      "code": "MARISIMON",
+      "names": "Mariángel & Simón",
+      "passes": 2,
+      "status": "pending",
+      "guests": [
+        {
+          "name": "Mariángel",
+          "isAttending": true,
+          "dietaryRestrictions": "none"
+        },
+        {
+          "name": "Simón",
+          "isAttending": true,
+          "dietaryRestrictions": "none"
+        }
+      ]
+    },
+    {
+      "code": "MAALWINES",
+      "names": "Santi & Maite",
+      "passes": 2,
+      "status": "pending",
+      "guests": [
+        {
+          "name": "Santi",
+          "isAttending": true,
+          "dietaryRestrictions": "none"
+        },
+        {
+          "name": "Maite",
+          "isAttending": true,
+          "dietaryRestrictions": "vegetarian"
+        }
+      ]
+    },
+    {
+      "code": "FAMILIA2026",
+      "names": "Familia Pérez",
+      "passes": 4,
+      "status": "pending",
+      "guests": [
+        {
+          "name": "Carlos Pérez",
+          "isAttending": true,
+          "dietaryRestrictions": "celiac"
+        },
+        {
+          "name": "Lucía de Pérez",
+          "isAttending": true,
+          "dietaryRestrictions": "none"
+        },
+        {
+          "name": "Mateo Pérez",
+          "isAttending": true,
+          "dietaryRestrictions": "none"
+        },
+        {
+          "name": "Sofía Pérez",
+          "isAttending": true,
+          "dietaryRestrictions": "none"
+        }
+      ]
+    },
+    {
+      "code": "MILULOVER",
+      "names": "Fanáticos de Milu",
+      "passes": 2,
+      "status": "pending",
+      "guests": [
+        {
+          "name": "Diego Fernández",
+          "isAttending": true,
+          "dietaryRestrictions": "none"
+        },
+        {
+          "name": "Valeria Rossi",
+          "isAttending": true,
+          "dietaryRestrictions": "vegan"
+        }
+      ]
+    },
+    {
+      "code": "INVITADO123",
+      "names": "Juan Gómez & Acompañante",
+      "passes": 2,
+      "status": "pending",
+      "guests": [
+        {
+          "name": "Juan Gómez",
+          "isAttending": true,
+          "dietaryRestrictions": "none"
+        },
+        {
+          "name": "Acompañante",
+          "isAttending": true,
+          "dietaryRestrictions": "none"
+        }
+      ]
+    }
+  ]
+}

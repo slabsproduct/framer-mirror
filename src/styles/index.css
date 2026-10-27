@@ -1,0 +1,91 @@
+@font-face {
+  font-family: "Second Signature Regular";
+  src: url("https://framerusercontent.com/assets/3pl2AKS0fV7JvKNtiFM3DZGdCU.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Second Signature Alt";
+  src: url("https://framerusercontent.com/assets/jcOxIgQHhPNtQXm0oBwhwDZmVU.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Melagu Regular";
+  src: url("https://framerusercontent.com/assets/p8R19B0sS9kTNFrmVQVV9nr8OJY.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Enoway Pro Regular";
+  src: url("https://framerusercontent.com/assets/jFFPJtwhAZg01uuxOLkGQpI7Q.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  --font-script: "Second Signature Regular", cursive, sans-serif;
+  --font-script-alt: "Second Signature Alt", cursive, sans-serif;
+  --font-serif: "Melagu Regular", "Instrument Serif", Georgia, serif;
+  --font-sans: "Manrope", "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  --color-olive: #363b1f;
+  --color-olive-dark: #272c15;
+  --color-burgundy: #6e0d23;
+  --color-burgundy-hover: #580a1c;
+  --color-cream: #faf6f2;
+  --color-card-bg: #feefe5;
+  --color-card-border: #fae4d6;
+  --color-text-main: #2b2b2b;
+  --color-text-muted: #555555;
+  --color-offwhite: #f0f0f0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-cream);
+  color: var(--color-text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background-image: url("https://framerusercontent.com/images/g2zAgxHOdi07CztwrjrtaWDDy8.jpg?width=1376&height=768");
+  background-repeat: repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+/* Utilities */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.text-script {
+  font-family: var(--font-script);
+}
+
+.text-serif {
+  font-family: var(--font-serif);
+}
+
+.text-sans {
+  font-family: var(--font-sans);
+}
