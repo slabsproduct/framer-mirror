@@ -24,6 +24,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         admin: resolve(__dirname, 'admin.html'),
+        rsvp: resolve(__dirname, 'rsvp.html'),
       },
     },
   },
